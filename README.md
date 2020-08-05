@@ -10,6 +10,9 @@ This repository is an official PyTorch implementation of the paper:
 [Jitendra Malik](https://people.eecs.berkeley.edu/~malik/) <br>
 [[website](https://haozhiqi.github.io/RPIN)], [[arXiv](https://arxiv.org/)]
 
+
+![image](https://haozhiqi.github.io/RPIN/figs/teaser.png)
+
 ## Introduction
 
 In this project, we aim to leverage the ideas from success stories in visual recognition tasks to build object 
@@ -17,6 +20,12 @@ representations that can capture inter-object and object-environment interaction
 we propose Region Proposal Interaction Networks (RPIN), which reason about each object's trajectory in a latent 
 region-proposal feature space. Our approach outperforms prior methods by a significant margin both in terms of 
 prediction quality and their ability to plan for downstream tasks, and also generalize well to novel environments.
+
+## Method
+
+![image](https://haozhiqi.github.io/RPIN/figs/methodv2.png)
+
+Our model takes N video frames as inputs and predicts the object locations for the future T timesteps, as illustrated above. We first extract the image feature representation using a ConvNet for each frame, and then apply RoI pooling to obtain object-centric visual features. These object feature representations are forwarded to the interaction modules to perform interaction reasoning and predict future object locations. The whole pipeline is trained end-to-end by minimizing the loss between predicted and the ground-truth object locations. Since the parameters of each interaction module is shared so we can apply this process recurrently over time to an arbitrary T during testing.
 
 ## Using RPIN
 
