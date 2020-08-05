@@ -1,0 +1,41 @@
+OUTPUT_DIR: ./outputs/phys
+DATA_ROOT: 'data/phyre'
+SOLVER:
+  BASE_LR: 1.0e-4  # single GPU LR
+  WEIGHT_DECAY: 1.0e-6
+  SCHEDULER: 'cosine'
+  MAX_ITERS: 3000000
+  VAL_INTERVAL: 300000
+  BATCH_SIZE: 20 # single GPU Batch Size
+INPUT:
+  IMAGE_MEAN: [244.57122685, 242.73798995, 243.58119133]
+  IMAGE_STD: [19.81916587, 20.05737364, 15.32224884]
+  PRELOAD_TO_MEMORY: False
+RPIN:
+  BACKBONE: 'hourglass'
+  ARCH: 'rpin'
+  VE_FEAT_DIM: 256
+  IN_FEAT_DIM: 256
+  # prediction setting:
+  INPUT_SIZE: 4
+  CONS_SIZE: 1
+  PRED_SIZE_TRAIN: 20
+  PRED_SIZE_TEST: 40
+  # input setting:
+  INPUT_HEIGHT: 128
+  INPUT_WIDTH: 128
+  NUM_OBJS: 3
+  # data augmentation
+  HORIZONTAL_FLIP: True
+  VERTICAL_FLIP: False
+  # loss weight
+  OFFSET_LOSS_WEIGHT: 1.0
+  POSITION_LOSS_WEIGHT: 1.0
+  # ----- image feature
+  IMAGE_UP: False
+  # ----- coordinate feature
+  COOR_FEATURE: True
+  COOR_FEATURE_EMBEDDING: True
+  # ----- conditional computation
+  IN_CONDITION: True
+  IN_CONDITION_R: 2.5

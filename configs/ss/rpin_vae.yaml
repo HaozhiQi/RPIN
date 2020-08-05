@@ -1,0 +1,44 @@
+OUTPUT_DIR: ./outputs/phys
+DATA_ROOT: 'data/shape-stack'
+SOLVER:
+  BASE_LR: 4.0e-4  # single GPU LR
+  WEIGHT_DECAY: 0.0
+  SCHEDULER: 'cosine'
+  MAX_ITERS: 1000000
+  VAL_INTERVAL: 100000
+  BATCH_SIZE: 40 # single GPU Batch Size
+INPUT:
+  IMAGE_MEAN: [105.34886558, 110.74936866, 105.03055784]
+  IMAGE_STD: [73.17451869, 76.58094774, 75.4099835]
+  PRELOAD_TO_MEMORY: False
+RPIN:
+  BACKBONE: 'hourglass_bn'
+  ARCH: 'rpin_vae'
+  VE_FEAT_DIM: 256
+  IN_FEAT_DIM: 256
+  # prediction setting:
+  INPUT_SIZE: 1
+  CONS_SIZE: 1
+  PRED_SIZE_TRAIN: 15
+  PRED_SIZE_TEST: 30
+  # input setting:
+  INPUT_HEIGHT: 224
+  INPUT_WIDTH: 224
+  NUM_OBJS: 3
+  # data augmentation
+  HORIZONTAL_FLIP: True
+  VERTICAL_FLIP: False
+  # loss weight
+  OFFSET_LOSS_WEIGHT: 0.01
+  POSITION_LOSS_WEIGHT: 1.0
+  # ----- image feature
+  IMAGE_UP: False
+  ROI_POOL_SIZE: 3
+  # ----- coordinate feature
+  COOR_FEATURE: True
+  COOR_FEATURE_EMBEDDING: True
+  # ----- conditional computation
+  IN_CONDITION: True
+  # ----- vae setting
+  VAE: True
+  VAE_KL_LOSS_WEIGHT: 3e-5

@@ -1,0 +1,92 @@
+# Region Proposal Interaction Network
+
+This repository is an official PyTorch implementation of the paper:
+
+<b>Learning Long-term Visual Dynamics with Region Proposal Interaction Networks</b> <br>
+[Haozhi Qi](https://people.eecs.berkeley.edu/~hqi/),
+[Xiaolong Wang](https://xiaolonw.github.io/),
+[Deepak Pathak](https://www.cs.cmu.edu/~dpathak/),
+[Yi Ma](http://people.eecs.berkeley.edu/~yima/),
+[Jitendra Malik](https://people.eecs.berkeley.edu/~malik/) <br>
+[[website](https://haozhiqi.github.io/RPIN)], [[arXiv](https://arxiv.org/)]
+
+## Introduction
+
+In this project, we aim to leverage the ideas from success stories in visual recognition tasks to build object 
+representations that can capture inter-object and object-environment interactions over a long range. To this end, 
+we propose Region Proposal Interaction Networks (RPIN), which reason about each object's trajectory in a latent 
+region-proposal feature space. Our approach outperforms prior methods by a significant margin both in terms of 
+prediction quality and their ability to plan for downstream tasks, and also generalize well to novel environments.
+
+## Using RPIN
+
+### Installation
+
+This codebase is developed and tested with python 3.6, PyTorch 1.4, and cuda 10.1. But any version newer than that should work.
+
+Here we gave an example of installing RPIN using conda virtual environment:
+```
+git clone https://github.com/HaozhiQi/RPIN
+cd RPIN
+conda create -y -n rpin python=3.6
+conda activate rpin
+# install pytorch according to https://pytorch.org/
+conda install -y pytorch==1.4 torchvision cudatoolkit=10.1 -c pytorch
+pip install yacs
+pip install opencv-python==3.4.2.17
+# to evaluate phyre planning, you need to also do
+pip install phyre
+```
+
+### Evaluation & Training of Prediction
+
+We provide instructions for each dataset separately.
+
+1. Download data: see [DATA.md](DATA.md).
+2. Download our pre-trained models and logs from this [link](https://drive.google.com/file/d/17ZvnHodfOyag8rdO_cBC2Z1ov64uivPk/view?usp=sharing). And unzip it so that the models are placed at ```outputs/phys/${DATASET}/rpin/*```
+
+To run evaluation on the test dataset, use the following commands:
+
+```
+sh test_pred.sh simb ${MODEL_NAME} ${CACHE_NAME} ${GPU_ID}
+```
+
+For example:
+
+```
+sh test_pred.sh realb rpin rpin ${GPU_ID}
+sh test_pred.sh phyre rpin rpin ${GPU_ID}
+sh test_pred.sh phyrec rpin rpin ${GPU_ID}
+sh test_pred.sh shape-stack rpin_vae rpin ${GPU_ID}
+```
+
+To train your own model on our dataset, use the following command:
+```
+# Training, change ${DATASET_NAME} to simb/realb/phyre/phyrec/shape-stack
+python train.py --cfg configs/${DATASET_NAME}/rpin.yaml --gpus ${GPU_ID} --output ${OUTPUT_NAME}
+# or for shape-stack:
+python train.py --cfg configs/ss/rpin_vae.yaml --gpus ${GPU_ID} --output ${OUTPUT_NAME}
+```
+
+### Evaluation of Planning
+
+To evaluate planning performance on PHYRE, use:
+```
+sh test_plan.sh phyre rpin rpin ${GPU_ID}
+sh test_plan.sh phyrec rpin rpin ${GPU_ID}
+```
+
+More results (billiard planning, generalization to novel environments) will come soon.
+
+
+## Citing RPIN
+
+If you find **RPIN** or this codebase helpful in your research, please consider citing:
+```
+@article{qi2020learning,
+  author={Qi, Haozhi and Wang, Xiaolong and Pathak, Deepak and Ma, Yi and Malik, Jitendra},
+  title={Learning Long-term Visual Dynamics with Region Proposal Interaction Networks},
+  journal={arXiv},
+  year={2020}
+}
+```

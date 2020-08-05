@@ -1,0 +1,38 @@
+OUTPUT_DIR: ./outputs/phys
+DATA_ROOT: 'data/realb'
+SOLVER:
+  BASE_LR: 4.0e-4  # single GPU LR
+  WEIGHT_DECAY: 1.0e-6
+  SCHEDULER: 'cosine'
+  VAL_INTERVAL: 100000
+  MAX_ITERS: 2000000
+  BATCH_SIZE: 20 # single GPU Batch Size
+INPUT:
+  IMAGE_MEAN: [123.49497621, 71.4224038, 57.6804548]
+  IMAGE_STD: [45.16602904, 23.43329777, 15.98162961]
+  PRELOAD_TO_MEMORY: False
+RPIN:
+  BACKBONE: 'hourglass'
+  ARCH: 'rpin'
+  VE_FEAT_DIM: 256
+  IN_FEAT_DIM: 256
+  # prediction setting:
+  INPUT_SIZE: 4
+  CONS_SIZE: 1
+  PRED_SIZE_TRAIN: 20
+  PRED_SIZE_TEST: 40
+  # input setting:
+  INPUT_HEIGHT: 96
+  INPUT_WIDTH: 192
+  NUM_OBJS: 3
+  # data augmentation
+  HORIZONTAL_FLIP: True
+  VERTICAL_FLIP: True
+  # loss weight
+  OFFSET_LOSS_WEIGHT: 100.0
+  POSITION_LOSS_WEIGHT: 1.0
+  # ----- coordinate feature
+  COOR_FEATURE: True
+  COOR_FEATURE_EMBEDDING: True
+  # ----- conditional computation
+  IN_CONDITION: True

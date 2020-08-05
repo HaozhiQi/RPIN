@@ -1,0 +1,38 @@
+OUTPUT_DIR: ./outputs/phys
+DATA_ROOT: 'data/simb'
+SOLVER:
+  BASE_LR: 2.0e-3  # single GPU LR
+  WEIGHT_DECAY: 1.0e-6
+  SCHEDULER: 'cosine'
+  MAX_ITERS: 20000000
+  VAL_INTERVAL: 1000000
+  BATCH_SIZE: 200 # single GPU Batch Size
+INPUT:
+  IMAGE_MEAN: [0.00278143, 0.00277988, 0.00278114]
+  IMAGE_STD: [0.0013763 , 0.00137207, 0.00136406]
+  PRELOAD_TO_MEMORY: True
+RPIN:
+  BACKBONE: 'hourglass_S_bn'
+  ARCH: 'rpin'
+  VE_FEAT_DIM: 64
+  IN_FEAT_DIM: 64
+  # prediction setting:
+  INPUT_SIZE: 4
+  CONS_SIZE: 1
+  PRED_SIZE_TRAIN: 20
+  PRED_SIZE_TEST: 40
+  # input setting:
+  INPUT_HEIGHT: 64
+  INPUT_WIDTH: 64
+  NUM_OBJS: 3
+  # data augmentation
+  HORIZONTAL_FLIP: True
+  VERTICAL_FLIP: True
+  # loss weight
+  OFFSET_LOSS_WEIGHT: 1.0
+  POSITION_LOSS_WEIGHT: 1.0
+  # ----- coordinate feature
+  COOR_FEATURE: True
+  COOR_FEATURE_EMBEDDING: True
+  # ----- conditional computation
+  IN_CONDITION: True
