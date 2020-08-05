@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title> Learning Long-term Visual Dynamics with Region Proposal Interaction Networks </title>
+    
+    <link href="res/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+      body {
+        font-family: Arial;
+        font-size:15px;
+        margin: 60px auto;
+        width: auto;
+        max-width: 1200px;
+      }
+
+
+
+      hr {
+        border: 0;
+        height: 1.0px;
+        background-image: linear-gradient(to right, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3));
+      }
+
+      .gap-30 {
+      width:100%;
+      height:30px;
+      }
+
+      .gap-20 {
+      width:100%;
+      height:20px;
+      }
+
+      .gap-10 {
+      width:100%;
+      height:10px;
+      }
+
+      .gap-5 {
+      width:100%;
+      height:5px;
+      }
+
+      .no-gutters {
+      margin-right: 0;
+      margin-left: 0;
+
+      > .col,
+      > [class*="col-"] {
+        padding-right: 0;
+        padding-left: 0;
+      }
+    }
+
+    </style>
+
+  </head>
+
+  <div class="container">
+
+    <center><span style="font-size:36px"> Learning Long-term Visual Dynamics with <br> Region Proposal Interaction Networks </span></center>
+    <div class="gap-5"></div>
+
+    <!--------------------- Author Names --------------------->
+    <div class="row">
+      <div class="col-md-1">
+      </div>
+      <div class="col-md-2">
+        <center><span style="font-size:16px">
+          <a href="https://people.eecs.berkeley.edu/~hqi">Haozhi Qi<sup style="font-size:10px">1</sup></a>
+        </span></center>
+      </div>
+
+      <div class="col-md-2">
+        <center><span style="font-size:16px">
+          <a href="https://xiaolonw.github.io">Xiaolong Wang<sup style="font-size:10px">2</sup></a>
+        </span></center>
+      </div>
+
+      <div class="col-md-2">
+        <center><span style="font-size:16px">
+          <a href="https://www.cs.cmu.edu/~dpathak">Deepak Pathak<sup style="font-size:10px">3</sup></a>
+        </span></center>
+      </div>
+
+      <div class="col-md-2">
+        <center><span style="font-size:16px">
+          <a href="https://people.eecs.berkeley.edu/~yima">Yi Ma<sup style="font-size:10px">1</sup></a>
+        </span></center>
+      </div>
+
+      <div class="col-md-2">
+        <center><span style="font-size:16px">
+          <a href="https://people.eecs.berkeley.edu/~malik">Jitendra Malik<sup style="font-size:10px">1</sup></a>
+        </span></center>
+      </div>
+
+      <div class="col-md-1">
+      </div>
+    </div>
+
+    <!--------------------- AFFILIATIONS --------------------->
+    <div class="gap-5"></div>
+    <div class="row">
+
+      <div class="col-md-3">
+      </div>
+
+      <div class="col-md-2">
+        <center><span style="font-size:16px">
+          UC Berkeley<sup style="font-size:10px">1</sup>
+        </span></center>
+      </div>
+
+      <div class="col-md-2">
+        <center><span style="font-size:16px">
+          UC San Diego<sup style="font-size:10px">2</sup>
+        </span></center>
+      </div>
+
+      <div class="col-md-2">
+        <center><span style="font-size:16px">
+          CMU<sup style="font-size:10px">3</sup>
+        </span></center>
+      </div>
+
+      <div class="col-md-3">
+      </div>
+    </div>
+    <!--------------------- paper and code link --------------------->
+    <div class="gap-5"></div>
+    <div class="row">
+      <div class="col-md-4">
+      </div>
+
+      <div class="col-md-2">
+        <center><span style="font-size:16px">
+          <a href="">[arXiv]</a>
+        </span></center>
+      </div>
+
+      <div class="col-md-2">
+        <center><span style="font-size:16px">
+          <a href="https://github.com/HaozhiQi/RPIN">[code]</a>
+        </span></center>
+      </div>
+
+      <div class="col-md-4">
+      </div>
+    </div>
+    <!--------------------- teaser --------------------->
+    <div class="gap-5"></div>
+    <div class="img" style="text-align:center">
+      <img src="./figs/teaser.png" style="margin:0.2em;max-width:75%">
+    </div>
+
+    <!--------------------- abstract --------------------->
+    <div class="gap-20"></div>
+    <b><span style="font-size:20px">Abstract:</span></b><br>
+    <div class="gap-5"></div>
+
+    <p> Learning long-term dynamics models is the key to understanding physical common sense.
+Most existing approaches on learning dynamics from visual input sidestep long-term predictions by resorting to rapid re-planning with short-term models. This not only requires such models to be super accurate but also limits them only to tasks where an agent can continuously obtain feedback and take action at each step until completion.
+In this paper, we aim to leverage the ideas from success stories in visual recognition tasks to build object representations that can capture inter-object and object-environment interactions over a long range.
+To this end, we propose Region Proposal Interaction Networks (RPIN), which reason about each object's trajectory in a latent region-proposal feature space.
+Thanks to the simple yet effective object representation, our approach outperforms prior methods by a significant margin both in terms of prediction quality and their ability to plan for downstream tasks, and also generalize well to novel environments.
+    <hr>
+
+    <b><span style="font-size:20px">Methods:</span></b><br>
+
+    <div class="gap-20"></div>
+    <div class="img" style="text-align:center">
+      <img src="./figs/methodv2.png" style="margin:0.2em;max-width:75%">
+    </div>
+    <div class="gap-20"></div>
+    Our model takes N video frames as inputs and predicts the object locations for the future T timesteps, as illustrated above. We first extract the image feature representation using a ConvNet for each frame, and then apply RoI pooling to obtain object-centric visual features. These object feature representations are forwarded to the interaction modules to perform interaction reasoning and predict future object locations.
+The whole pipeline is trained end-to-end by minimizing the loss between predicted and the ground-truth object locations. Since the parameters of each interaction module is shared so we can apply this process recurrently over time to an arbitrary T during testing.
+
+    <hr>
+
+    <b><span style="font-size:20px">Qualitative Results:</span></b><br>
+    <div class="gap-10"></div>
+
+    <center><b><span style="font-size:18px"> Simulated Billiard </span></b></center>
+    <div class="gap-10"></div>
+    <div class="row no-gutters">
+      <div class="col-2">
+        <img src="./vis/simb/gt_00008_00046.gif" style="margin:1em;max-width:95%">
+      </div>
+
+      <div class="col-2">
+        <img src="./vis/simb/pred_00008_00046.gif" style="margin:1em;max-width:95%">
+      </div>
+
+      <div class="col-2">
+        <img src="./vis/simb/gt_00015_00017.gif" style="margin:1em;max-width:95%">
+      </div>
+
+      <div class="col-2">
+        <img src="./vis/simb/pred_00015_00017.gif" style="margin:1em;max-width:95%">
+      </div>
+
+      <div class="col-2">
+        <img src="./vis/simb/gt_00020_00044.gif" style="margin:1em;max-width:95%">
+      </div>
+
+      <div class="col-2">
+        <img src="./vis/simb/pred_00020_00044.gif" style="margin:1em;max-width:95%">
+      </div>
+    </div>
+    <div class="row no-gutters">
+      <div class="col-2">
+        <img src="./vis/simb/gt_00021_00016.gif" style="margin:1em;max-width:95%">
+      </div>
+
+      <div class="col-2">
+        <img src="./vis/simb/pred_00021_00016.gif" style="margin:1em;max-width:95%">
+      </div>
+
+      <div class="col-2">
+        <img src="./vis/simb/gt_00024_00036.gif" style="margin:1em;max-width:95%">
+      </div>
+
+      <div class="col-2">
+        <img src="./vis/simb/pred_00024_00036.gif" style="margin:1em;max-width:95%">
+      </div>
+
+      <div class="col-2">
+        <img src="./vis/simb/gt_00030_00018.gif" style="margin:1em;max-width:95%">
+      </div>
+
+      <div class="col-2">
+        <img src="./vis/simb/pred_00030_00018.gif" style="margin:1em;max-width:95%">
+      </div>
+    </div>
+
+    <div class="gap-10"></div>
+    <center><b><span style="font-size:18px"> Real-World Billiard </span></b></center>
+    <div class="gap-10"></div>
+    <div class="row no-gutters">
+      <div class="col-3">
+        <img src="./vis/realb/gt_009_015.gif" style="margin:1em;max-width:95%">
+      </div>
+
+      <div class="col-3">
+        <img src="./vis/realb/pred_009_015.gif" style="margin:1em;max-width:95%">
+      </div>
+
+      <div class="col-3">
+        <img src="./vis/realb/gt_009_028.gif" style="margin:1em;max-width:95%">
+      </div>
+
+      <div class="col-3">
+        <img src="./vis/realb/pred_009_028.gif" style="margin:1em;max-width:95%">
+      </div>
+    </div>
+    <div class="row no-gutters">
+      <div class="col-3">
+        <img src="./vis/realb/gt_009_033.gif" style="margin:1em;max-width:95%">
+      </div>
+
+      <div class="col-3">
+        <img src="./vis/realb/pred_009_033.gif" style="margin:1em;max-width:95%">
+      </div>
+      <div class="col-3">
+        <img src="./vis/realb/gt_009_063.gif" style="margin:1em;max-width:95%">
+      </div>
+
+      <div class="col-3">
+        <img src="./vis/realb/pred_009_063.gif" style="margin:1em;max-width:95%">
+      </div>
+    </div>
+    <div class="row no-gutters">
+      <div class="col-3">
+        <img src="./vis/realb/gt_009_120.gif" style="margin:1em;max-width:95%">
+      </div>
+      <div class="col-3">
+        <img src="./vis/realb/pred_009_120.gif" style="margin:1em;max-width:95%">
+      </div>
+      <div class="col-3">
+        <img src="./vis/realb/gt_019_037.gif" style="margin:1em;max-width:95%">
+      </div>
+      <div class="col-3">
+        <img src="./vis/realb/pred_019_037.gif" style="margin:1em;max-width:95%">
+      </div>
+    </div>
+
+    <div class="gap-10"></div>
+    <center><b><span style="font-size:18px"> PHYRE </span></b></center>
+    <div class="gap-10"></div>
+    <div class="row no-gutters">
+      <div class="col-2">
+        <img src="./vis/phyre/gt_00000_000_7_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-2">
+        <img src="./vis/phyre/pred_00000_000_7_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-2">
+        <img src="./vis/phyre/gt_00002_007_7_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-2">
+        <img src="./vis/phyre/pred_00002_007_7_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-2">
+        <img src="./vis/phyre/gt_00014_275_9_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-2">
+        <img src="./vis/phyre/pred_00014_275_9_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+    </div>
+    <div class="row no-gutters">
+      <div class="col-2">
+        <img src="./vis/phyre/gt_00001_000_6_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-2">
+        <img src="./vis/phyre/pred_00001_000_6_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-2">
+        <img src="./vis/phyre/gt_00002_044_7_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-2">
+        <img src="./vis/phyre/pred_00002_044_7_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-2">
+        <img src="./vis/phyre/gt_00019_244_3_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-2">
+        <img src="./vis/phyre/pred_00019_244_3_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+    </div>
+    <div class="row no-gutters">
+      <div class="col-2">
+        <img src="./vis/phyre/gt_00012_037_15_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-2">
+        <img src="./vis/phyre/pred_00012_037_15_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-2">
+        <img src="./vis/phyre/gt_00011_872_2_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-2">
+        <img src="./vis/phyre/pred_00011_872_2_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-2">
+        <img src="./vis/phyre/gt_00015_016_0_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-2">
+        <img src="./vis/phyre/pred_00015_016_0_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+    </div>
+    <div class="row no-gutters">
+      <div class="col-2">
+        <img src="./vis/phyre/gt_00012_101_2_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-2">
+        <img src="./vis/phyre/pred_00012_101_2_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-2">
+        <img src="./vis/phyre/gt_00011_342_3_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-2">
+        <img src="./vis/phyre/pred_00011_342_3_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-2">
+        <img src="./vis/phyre/gt_00015_171_4_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-2">
+        <img src="./vis/phyre/pred_00015_171_4_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+    </div>
+    <div class="row no-gutters">
+      <div class="col-2">
+        <img src="./vis/phyre/gt_00016_184_2_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-2">
+        <img src="./vis/phyre/pred_00016_184_2_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-2">
+        <img src="./vis/phyre/gt_00020_004_25_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-2">
+        <img src="./vis/phyre/pred_00020_004_25_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-2">
+        <img src="./vis/phyre/gt_00024_048_2_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-2">
+        <img src="./vis/phyre/pred_00024_048_2_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+    </div>
+    <div class="row no-gutters">
+      <div class="col-2">
+        <img src="./vis/phyre/gt_00016_609_25_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-2">
+        <img src="./vis/phyre/pred_00016_609_25_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-2">
+        <img src="./vis/phyre/gt_00020_044_6_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-2">
+        <img src="./vis/phyre/pred_00020_044_6_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-2">
+        <img src="./vis/phyre/gt_00024_139_4_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-2">
+        <img src="./vis/phyre/pred_00024_139_4_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+    </div>
+
+    <div class="gap-10"></div>
+    <center><b><span style="font-size:18px"> ShapeStacks </span></b></center>
+    <div class="gap-10"></div>
+
+    <div class="row no-gutters">
+      <div class="col-2">
+        <img src="./vis/shapestack/gt_0007_000.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-2">
+        <img src="./vis/shapestack/pred_0007_000.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-2">
+        <img src="./vis/shapestack/gt_0016_000.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-2">
+        <img src="./vis/shapestack/pred_0016_000.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-2">
+        <img src="./vis/shapestack/gt_0029_000.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-2">
+        <img src="./vis/shapestack/pred_0029_000.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      </div>
+    </div>
+
+    <hr>
+
+    <!--<b><span style="font-size:20px">Paper (TODO):</span></b><br>
+    <div class="img" style="text-align:center">
+      <a href="https://arxiv.org/>
+        <img src="./figs/thumbnail.png" style="margin:1.2em;max-width:95%">
+      </a>
+    </div>
+
+    <hr>-->
+
+    <b><span style="font-size:20px">Bibtex:</span></b>
+    <br>
+    <div class="gap-10"></div>
+    <pre>
+    @article{qi2020learning,
+     author={Qi, Haozhi and Wang, Xiaolong and Pathak, Deepak and Ma, Yi and Malik, Jitendra},
+     title={Learning Long-term Visual Dynamics with Region Proposal Interaction Networks},
+     journal={arXiv},
+     year={2020}
+    }
+    </pre>
+    <hr>
+
+    <b><span style="font-size:20px">Acknowledgements:</span></b><br>
+    <div class="gap-10"></div>
+    This work is supported in part by DARPA MCS and DARPA LwLL.
+    We would like to thank the members of BAIR for fruitful discussions and comments.
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="res/js/bootstrap.min.js"></script>
+    
+  </div>
+</html>
+
