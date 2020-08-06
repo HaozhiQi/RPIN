@@ -8,7 +8,7 @@ This repository is an official PyTorch implementation of the paper:
 [Deepak Pathak](https://www.cs.cmu.edu/~dpathak/),
 [Yi Ma](http://people.eecs.berkeley.edu/~yima/),
 [Jitendra Malik](https://people.eecs.berkeley.edu/~malik/) <br>
-[[website](https://haozhiqi.github.io/RPIN)], [[arXiv](https://arxiv.org/)]
+[[website](https://haozhiqi.github.io/RPIN)], [[arXiv](http://arxiv.org/abs/2008.02265)]
 
 
 ![image](https://haozhiqi.github.io/RPIN/figs/teaser.png)
