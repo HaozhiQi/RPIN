@@ -217,9 +217,9 @@ def gen_data(N, num_objs, name, show_video=False):
     col_f = empty((N, T,), dtype=bool)
     dat_r = empty((N, 3))
     for i in tqdm(range(N)):
-        r1 = 2  # + 3 * np.random.rand()
-        r2 = 2  # + 3 * np.random.rand()
-        r3 = 2  # + 3 * np.random.rand()
+        r1 = 2
+        r2 = 2
+        r3 = 2
         r = array([r1, r2, r3])
         dat[i], dat_y[i], init_a[i], key_f[i], col_f[i] = bounce_vec(res=res, n=num_objs, T=T, r=r)
         dat_r[i] = r.copy()
@@ -245,8 +245,8 @@ def gen_data(N, num_objs, name, show_video=False):
             show_sample(dat[i], i)
 
 
-if __name__ == "__main__":
-    cache_name = 'data/dynamics/simb'
+if __name__ == '__main__':
+    cache_name = 'data/simb'
     os.makedirs(cache_name, exist_ok=True)
     datasets = ['train', 'test']
     samples = [1000, 1000]
@@ -255,5 +255,3 @@ if __name__ == "__main__":
         random.seed(rng_seed)
         np.random.seed(rng_seed)
         gen_data(sample, num_objs, name=f'{cache_name}/{dataset}.pkl', show_video=False)
-    # for i in range(4):
-    #     gen_data(1000, num_objs, r, name=f'{cache_name}/3ball_60_{i}.pkl')

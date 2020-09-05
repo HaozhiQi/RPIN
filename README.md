@@ -57,21 +57,29 @@ We provide instructions for each dataset separately.
 To run evaluation on the test dataset, use the following commands:
 
 ```
-sh test_pred.sh simb ${MODEL_NAME} ${CACHE_NAME} ${GPU_ID}
+sh test_pred.sh ${DATASET_NAME} ${MODEL_NAME} ${CACHE_NAME} ${GPU_ID}
 ```
 
 For example:
 
 ```
+sh test_pred.sh simb rpin rpin ${GPU_ID}
 sh test_pred.sh realb rpin rpin ${GPU_ID}
 sh test_pred.sh phyre rpin rpin ${GPU_ID}
 sh test_pred.sh phyrec rpin rpin ${GPU_ID}
 sh test_pred.sh shape-stack rpin_vae rpin ${GPU_ID}
 ```
 
+The results should be as follows:
+
+|         | SimB   | RealB | PHYRE  | PHYRE-C | ShapeStacks
+| :---:   | :---:  | :---: | :---:  | :---:   | :---:
+| [0, T]  | 2.443  | 0.341 | 4.456  | 6.873   | 1.552
+| [T, 2T] | 22.199 | 2.194 | 12.196 | 15.775  | 6.891
+
 To train your own model on our dataset, use the following command:
 ```
-# Training, change ${DATASET_NAME} to simb/realb/phyre/phyrec/shape-stack
+# Training, change ${DATASET_NAME} to simb / realb / phyre / phyrec / shape-stack
 python train.py --cfg configs/${DATASET_NAME}/rpin.yaml --gpus ${GPU_ID} --output ${OUTPUT_NAME}
 # or for shape-stack:
 python train.py --cfg configs/ss/rpin_vae.yaml --gpus ${GPU_ID} --output ${OUTPUT_NAME}
@@ -79,13 +87,24 @@ python train.py --cfg configs/ss/rpin_vae.yaml --gpus ${GPU_ID} --output ${OUTPU
 
 ### Evaluation of Planning
 
-To evaluate planning performance on PHYRE, use:
+To evaluate planning performance on PHYRE and SimB, use:
 ```
 sh test_plan.sh phyre rpin rpin ${GPU_ID}
 sh test_plan.sh phyrec rpin rpin ${GPU_ID}
+sh test_plan.sh simb rpin rpin ${GPU_ID}
 ```
 
-More results (billiard planning, generalization to novel environments) will come soon.
+The results should be as follows:
+
+|         | PHYRE  | PHYRE-C
+| :---:   | :---:  | :---:
+| Top-1 Success Rate  | 33.08 | 18.33
+| Top-100 Success Rate | 83.46 | 74.67
+
+
+| SimB Init-End Error  | SimB Hitting Accuracy
+| :---:  | :---: |
+| 7.578      | 62.20 
 
 
 ## Citing RPIN

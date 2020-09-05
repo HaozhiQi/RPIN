@@ -91,6 +91,31 @@ def main():
         tester.test()
         return
 
+    # planning evaluation, for billiard
+    if args.eval_hit and 'phyre' not in C.DATA_ROOT:
+        model = eval(args.predictor_arch + '.Net')()
+        model.to(torch.device('cuda'))
+        model = torch.nn.DataParallel(
+            model, device_ids=[0]
+        )
+        cp = torch.load(args.predictor_init, map_location=f'cuda')
+        model.load_state_dict(cp['model'])
+
+        from neuralphys.evaluator_billiard_plan import PlanEvaluator
+        tester = PlanEvaluator(
+            device=torch.device(f'cuda'),
+            val_loader=val_loader,
+            num_gpus=1,
+            pred_model=model,
+            output_dir=output_dir,
+        )
+        tester.task_name = 'hitting'
+        tester.reset_param()
+        tester.test('hitting')
+        tester.task_name = 'init_end'
+        tester.reset_param()
+        tester.test('init_end')
+
 
 if __name__ == '__main__':
     main()
