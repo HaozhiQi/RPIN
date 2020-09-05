@@ -91,7 +91,7 @@ if __name__ == '__main__':
     random.seed(0)
     eval_setup = 'ball_within_template'
     cache_name = 'phyre'
-    exit()
+
     fold_id = 0  # For simplicity, we will just use one fold for evaluation.
     train_tasks, dev_tasks, test_tasks = phyre.get_fold(eval_setup, fold_id)
     # train, dev and test partition the whole data set
