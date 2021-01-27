@@ -1,0 +1,12 @@
+OUTPUT_DIR: ./outputs/cls
+DATA_ROOT: 'data/PHYRE_proposal/W0_rpcin_p200n800a100/'
+DATASET_ABS: 'PyPhys'
+SOLVER:
+  BASE_LR: 1.0e-3  # single GPU LR
+  WEIGHT_DECAY: 0.0
+  SCHEDULER: 'cosine'
+  MAX_ITERS: 100000
+  VAL_INTERVAL: 20000
+  BATCH_SIZE: 64 # single GPU Batch Size
+PCLS:
+  ARCH: 'resnet18'
