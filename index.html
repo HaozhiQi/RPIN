@@ -12,13 +12,20 @@
     <style>
       body {
         font-family: Arial;
-        font-size:15px;
+        font-size:18px;
         margin: 60px auto;
         width: auto;
         max-width: 1200px;
       }
 
-
+      a:link,a:visited
+      {
+        color: #0071bc;
+        text-decoration: none;
+      }
+      a:hover {
+        color: #208799;
+      }
 
       hr {
         border: 0;
@@ -64,38 +71,38 @@
   <div class="container">
 
     <center><span style="font-size:36px"> Learning Long-term Visual Dynamics with <br> Region Proposal Interaction Networks </span></center>
-    <div class="gap-5"></div>
+    <div class="gap-20"></div>
 
     <!--------------------- Author Names --------------------->
     <div class="row">
       <div class="col-md-1">
       </div>
       <div class="col-md-2">
-        <center><span style="font-size:16px">
+        <center><span style="font-size:18px font-weight:800">
           <a href="https://people.eecs.berkeley.edu/~hqi">Haozhi Qi<sup style="font-size:10px">1</sup></a>
         </span></center>
       </div>
 
       <div class="col-md-2">
-        <center><span style="font-size:16px">
+        <center><span style="font-size:18px font-weight:800">
           <a href="https://xiaolonw.github.io">Xiaolong Wang<sup style="font-size:10px">2</sup></a>
         </span></center>
       </div>
 
       <div class="col-md-2">
-        <center><span style="font-size:16px">
+        <center><span style="font-size:18px font-weight:800">
           <a href="https://www.cs.cmu.edu/~dpathak">Deepak Pathak<sup style="font-size:10px">3</sup></a>
         </span></center>
       </div>
 
       <div class="col-md-2">
-        <center><span style="font-size:16px">
+        <center><span style="font-size:18px font-weight:800">
           <a href="https://people.eecs.berkeley.edu/~yima">Yi Ma<sup style="font-size:10px">1</sup></a>
         </span></center>
       </div>
 
       <div class="col-md-2">
-        <center><span style="font-size:16px">
+        <center><span style="font-size:18px font-weight:800">
           <a href="https://people.eecs.berkeley.edu/~malik">Jitendra Malik<sup style="font-size:10px">1</sup></a>
         </span></center>
       </div>
@@ -139,14 +146,14 @@
       </div>
 
       <div class="col-md-2">
-        <center><span style="font-size:16px">
-          <a href="https://arxiv.org/abs/2008.02265">[arXiv]</a>
+        <center><span style="font-size:17px font-weight:800">
+          <a href="https://arxiv.org/abs/2008.02265">[Paper]</a>
         </span></center>
       </div>
 
       <div class="col-md-2">
-        <center><span style="font-size:16px">
-          <a href="https://github.com/HaozhiQi/RPIN">[code]</a>
+        <center><span style="font-size:17px font-weight:800">
+          <a href="https://github.com/HaozhiQi/RPIN">[Code]</a>
         </span></center>
       </div>
 
@@ -154,7 +161,7 @@
       </div>
     </div>
     <!--------------------- teaser --------------------->
-    <div class="gap-5"></div>
+    <div class="gap-20"></div>
     <div class="img" style="text-align:center">
       <img src="./figs/teaser.png" style="margin:0.2em;max-width:75%">
     </div>
@@ -164,397 +171,869 @@
     <b><span style="font-size:20px">Abstract:</span></b><br>
     <div class="gap-5"></div>
 
-    <p> Learning long-term dynamics models is the key to understanding physical common sense.
-Most existing approaches on learning dynamics from visual input sidestep long-term predictions by resorting to rapid re-planning with short-term models. This not only requires such models to be super accurate but also limits them only to tasks where an agent can continuously obtain feedback and take action at each step until completion.
-In this paper, we aim to leverage the ideas from success stories in visual recognition tasks to build object representations that can capture inter-object and object-environment interactions over a long range.
-To this end, we propose Region Proposal Interaction Networks (RPIN), which reason about each object's trajectory in a latent region-proposal feature space.
-Thanks to the simple yet effective object representation, our approach outperforms prior methods by a significant margin both in terms of prediction quality and their ability to plan for downstream tasks, and also generalize well to novel environments.
+    <p> Learning long-term dynamics models is the key to understanding physical
+common sense. Most existing approaches on learning dynamics from visual input
+sidestep long-term predictions by resorting to rapid re-planning with
+short-term models. This not only requires such models to be super accurate but
+also limits them only to tasks where an agent can continuously obtain feedback
+and take action \textit{at each step} until completion. In this paper, we aim
+to leverage the ideas from success stories in visual recognition tasks to build
+object representations that can capture inter-object and object-environment
+interactions over a long-range. To this end, we propose Region Proposal
+Interaction Networks (RPIN), which reason about each object's trajectory in a
+latent region-proposal feature space. Thanks to the simple yet effective object
+representation, our approach outperforms prior methods by a significant margin
+both in terms of prediction quality and their ability to plan for downstream
+tasks, and also generalize well to novel environments.
     <hr>
 
-    <b><span style="font-size:20px">Methods:</span></b><br>
+    <b><span style="font-size:20px">Method:</span></b><br>
 
     <div class="gap-20"></div>
     <div class="img" style="text-align:center">
       <img src="./figs/methodv2.png" style="margin:0.2em;max-width:75%">
     </div>
     <div class="gap-20"></div>
-    Our model takes N video frames as inputs and predicts the object locations for the future T timesteps, as illustrated above. We first extract the image feature representation using a ConvNet for each frame, and then apply RoI pooling to obtain object-centric visual features. These object feature representations are forwarded to the interaction modules to perform interaction reasoning and predict future object locations.
-The whole pipeline is trained end-to-end by minimizing the loss between predicted and the ground-truth object locations. Since the parameters of each interaction module is shared so we can apply this process recurrently over time to an arbitrary T during testing.
+    <p> Our model takes N video frames as inputs and predicts the object locations for the future T timesteps, as illustrated above. We first extract the image feature representation using a ConvNet for each frame, and then apply RoI Pooling to obtain object-centric visual features. These object feature representations are forwarded to the interaction modules to perform interaction reasoning and predict future object locations.
+      The whole pipeline is trained end-to-end by minimizing the loss between predicted and the ground-truth object locations. Since the parameters of each interaction module is shared so we can apply this process recurrently over time to an arbitrary T during testing. </p>
 
     <hr>
 
     <b><span style="font-size:20px">Qualitative Results:</span></b><br>
+    <div class="gap-30"></div>
+
+    <center><b><span style="font-size:20px"> PHYRE (within-task generalization) </span></b></center>
+
     <div class="gap-10"></div>
 
-    <center><b><span style="font-size:18px"> Simulated Billiard </span></b></center>
+    <p> We show our prediction results and baseline prediction results on the test set of PHYRE (within-task generalization, fold 0).
+      Given the first image and the objects' bounding boxes, we predict the future bounding boxes and masks for each moving objects.
+      The backgrounds (colored purple and black) and the color of the objects are taken from the input image. </p>
+
     <div class="gap-10"></div>
+
     <div class="row no-gutters">
-      <div class="col-2">
-        <center> Ground-Truth </center>
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <center> CVP </center>
+          </div>
+          <div class="col-3">
+            <center> OM </center>
+          </div>
+          <div class="col-3">
+            <center> Ours </center>
+          </div>
+          <div class="col-3">
+            <center> GT </center>
+          </div>
+        </div>
       </div>
-      <div class="col-2">
-        <center> Prediction </center>
-      </div>
-      <div class="col-2">
-        <center> Ground-Truth </center>
-      </div>
-      <div class="col-2">
-        <center> Prediction </center>
-      </div>
-      <div class="col-2">
-        <center> Ground-Truth </center>
-      </div>
-      <div class="col-2">
-        <center> Prediction </center>
-      </div>
-    </div>
-    <div class="row no-gutters">
-      <div class="col-2">
-        <img src="./vis/simb/gt_00008_00046.gif" style="margin:1em;max-width:95%">
-      </div>
-
-      <div class="col-2">
-        <img src="./vis/simb/pred_00008_00046.gif" style="margin:1em;max-width:95%">
-      </div>
-
-      <div class="col-2">
-        <img src="./vis/simb/gt_00015_00017.gif" style="margin:1em;max-width:95%">
-      </div>
-
-      <div class="col-2">
-        <img src="./vis/simb/pred_00015_00017.gif" style="margin:1em;max-width:95%">
-      </div>
-
-      <div class="col-2">
-        <img src="./vis/simb/gt_00020_00044.gif" style="margin:1em;max-width:95%">
-      </div>
-
-      <div class="col-2">
-        <img src="./vis/simb/pred_00020_00044.gif" style="margin:1em;max-width:95%">
-      </div>
-    </div>
-    <div class="row no-gutters">
-      <div class="col-2">
-        <img src="./vis/simb/gt_00021_00016.gif" style="margin:1em;max-width:95%">
-      </div>
-
-      <div class="col-2">
-        <img src="./vis/simb/pred_00021_00016.gif" style="margin:1em;max-width:95%">
-      </div>
-
-      <div class="col-2">
-        <img src="./vis/simb/gt_00024_00036.gif" style="margin:1em;max-width:95%">
-      </div>
-
-      <div class="col-2">
-        <img src="./vis/simb/pred_00024_00036.gif" style="margin:1em;max-width:95%">
-      </div>
-
-      <div class="col-2">
-        <img src="./vis/simb/gt_00030_00018.gif" style="margin:1em;max-width:95%">
-      </div>
-
-      <div class="col-2">
-        <img src="./vis/simb/pred_00030_00018.gif" style="margin:1em;max-width:95%">
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <center> CVP </center>
+          </div>
+          <div class="col-3">
+            <center> OM </center>
+          </div>
+          <div class="col-3">
+            <center> Ours </center>
+          </div>
+          <div class="col-3">
+            <center> GT </center>
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="gap-10"></div>
-    <center><b><span style="font-size:18px"> Real-World Billiard </span></b></center>
-    <div class="gap-10"></div>
-    <div class="row no-gutters">
-      <div class="col-3">
-        <center> Ground-Truth </center>
-      </div>
-      <div class="col-3">
-        <center> Prediction </center>
-      </div>
-      <div class="col-3">
-        <center> Ground-Truth </center>
-      </div>
-      <div class="col-3">
-        <center> Prediction </center>
-      </div>
-    </div>
-    <div class="row no-gutters">
-      <div class="col-3">
-        <img src="./vis/realb/gt_009_015.gif" style="margin:1em;max-width:95%">
-      </div>
 
-      <div class="col-3">
-        <img src="./vis/realb/pred_009_015.gif" style="margin:1em;max-width:95%">
-      </div>
-
-      <div class="col-3">
-        <img src="./vis/realb/gt_009_028.gif" style="margin:1em;max-width:95%">
-      </div>
-
-      <div class="col-3">
-        <img src="./vis/realb/pred_009_028.gif" style="margin:1em;max-width:95%">
-      </div>
-    </div>
     <div class="row no-gutters">
-      <div class="col-3">
-        <img src="./vis/realb/gt_009_033.gif" style="margin:1em;max-width:95%">
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <img src="./gifs/phyre/crop/pred_00023_470_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/mask/pred_00023_470_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/pred_00023_470_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/gt_00023_470_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+        </div>
       </div>
-
-      <div class="col-3">
-        <img src="./vis/realb/pred_009_033.gif" style="margin:1em;max-width:95%">
-      </div>
-      <div class="col-3">
-        <img src="./vis/realb/gt_009_063.gif" style="margin:1em;max-width:95%">
-      </div>
-
-      <div class="col-3">
-        <img src="./vis/realb/pred_009_063.gif" style="margin:1em;max-width:95%">
-      </div>
-    </div>
-    <div class="row no-gutters">
-      <div class="col-3">
-        <img src="./vis/realb/gt_009_120.gif" style="margin:1em;max-width:95%">
-      </div>
-      <div class="col-3">
-        <img src="./vis/realb/pred_009_120.gif" style="margin:1em;max-width:95%">
-      </div>
-      <div class="col-3">
-        <img src="./vis/realb/gt_019_037.gif" style="margin:1em;max-width:95%">
-      </div>
-      <div class="col-3">
-        <img src="./vis/realb/pred_019_037.gif" style="margin:1em;max-width:95%">
-      </div>
-    </div>
-    <div class="row no-gutters">
-      <div class="col-3">
-        <img src="./vis/realb/gt_039_031.gif" style="margin:1em;max-width:95%">
-      </div>
-      <div class="col-3">
-        <img src="./vis/realb/pred_039_031.gif" style="margin:1em;max-width:95%">
-      </div>
-      <div class="col-3">
-        <img src="./vis/realb/gt_039_048.gif" style="margin:1em;max-width:95%">
-      </div>
-      <div class="col-3">
-        <img src="./vis/realb/pred_039_048.gif" style="margin:1em;max-width:95%">
-      </div>
-    </div>
-    <div class="row no-gutters">
-      <div class="col-3">
-        <img src="./vis/realb/gt_049_009.gif" style="margin:1em;max-width:95%">
-      </div>
-      <div class="col-3">
-        <img src="./vis/realb/pred_049_009.gif" style="margin:1em;max-width:95%">
-      </div>
-      <div class="col-3">
-        <img src="./vis/realb/gt_049_023.gif" style="margin:1em;max-width:95%">
-      </div>
-      <div class="col-3">
-        <img src="./vis/realb/pred_049_023.gif" style="margin:1em;max-width:95%">
-      </div>
-    </div>
-    <div class="row no-gutters">
-      <div class="col-3">
-        <img src="./vis/realb/gt_059_010.gif" style="margin:1em;max-width:95%">
-      </div>
-      <div class="col-3">
-        <img src="./vis/realb/pred_059_010.gif" style="margin:1em;max-width:95%">
-      </div>
-      <div class="col-3">
-        <img src="./vis/realb/gt_059_033.gif" style="margin:1em;max-width:95%">
-      </div>
-      <div class="col-3">
-        <img src="./vis/realb/pred_059_033.gif" style="margin:1em;max-width:95%">
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <img src="./gifs/phyre/crop/pred_00022_537_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/mask/pred_00022_537_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/pred_00022_537_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/gt_00022_537_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="gap-10"></div>
-    <center><b><span style="font-size:18px"> PHYRE </span></b></center>
-    <div class="gap-10"></div>
+
     <div class="row no-gutters">
-      <div class="col-2">
-        <center> Ground-Truth </center>
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <img src="./gifs/phyre/crop/pred_00004_823_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/mask/pred_00004_823_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/pred_00004_823_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/gt_00004_823_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+        </div>
       </div>
-      <div class="col-2">
-        <center> Prediction </center>
-      </div>
-      <div class="col-2">
-        <center> Ground-Truth </center>
-      </div>
-      <div class="col-2">
-        <center> Prediction </center>
-      </div>
-      <div class="col-2">
-        <center> Ground-Truth </center>
-      </div>
-      <div class="col-2">
-        <center> Prediction </center>
-      </div>
-    </div>
-    <div class="row no-gutters">
-      <div class="col-2">
-        <img src="./vis/phyre/gt_00000_000_7_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
-      </div>
-      <div class="col-2">
-        <img src="./vis/phyre/pred_00000_000_7_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
-      </div>
-      <div class="col-2">
-        <img src="./vis/phyre/gt_00002_007_7_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
-      </div>
-      <div class="col-2">
-        <img src="./vis/phyre/pred_00002_007_7_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
-      </div>
-      <div class="col-2">
-        <img src="./vis/phyre/gt_00014_275_9_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
-      </div>
-      <div class="col-2">
-        <img src="./vis/phyre/pred_00014_275_9_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
-      </div>
-    </div>
-    <div class="row no-gutters">
-      <div class="col-2">
-        <img src="./vis/phyre/gt_00001_000_6_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
-      </div>
-      <div class="col-2">
-        <img src="./vis/phyre/pred_00001_000_6_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
-      </div>
-      <div class="col-2">
-        <img src="./vis/phyre/gt_00002_044_7_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
-      </div>
-      <div class="col-2">
-        <img src="./vis/phyre/pred_00002_044_7_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
-      </div>
-      <div class="col-2">
-        <img src="./vis/phyre/gt_00019_244_3_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
-      </div>
-      <div class="col-2">
-        <img src="./vis/phyre/pred_00019_244_3_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
-      </div>
-    </div>
-    <div class="row no-gutters">
-      <div class="col-2">
-        <img src="./vis/phyre/gt_00012_037_15_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
-      </div>
-      <div class="col-2">
-        <img src="./vis/phyre/pred_00012_037_15_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
-      </div>
-      <div class="col-2">
-        <img src="./vis/phyre/gt_00011_872_2_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
-      </div>
-      <div class="col-2">
-        <img src="./vis/phyre/pred_00011_872_2_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
-      </div>
-      <div class="col-2">
-        <img src="./vis/phyre/gt_00015_016_0_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
-      </div>
-      <div class="col-2">
-        <img src="./vis/phyre/pred_00015_016_0_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
-      </div>
-    </div>
-    <div class="row no-gutters">
-      <div class="col-2">
-        <img src="./vis/phyre/gt_00012_101_2_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
-      </div>
-      <div class="col-2">
-        <img src="./vis/phyre/pred_00012_101_2_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
-      </div>
-      <div class="col-2">
-        <img src="./vis/phyre/gt_00011_342_3_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
-      </div>
-      <div class="col-2">
-        <img src="./vis/phyre/pred_00011_342_3_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
-      </div>
-      <div class="col-2">
-        <img src="./vis/phyre/gt_00015_171_4_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
-      </div>
-      <div class="col-2">
-        <img src="./vis/phyre/pred_00015_171_4_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
-      </div>
-    </div>
-    <div class="row no-gutters">
-      <div class="col-2">
-        <img src="./vis/phyre/gt_00016_184_2_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
-      </div>
-      <div class="col-2">
-        <img src="./vis/phyre/pred_00016_184_2_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
-      </div>
-      <div class="col-2">
-        <img src="./vis/phyre/gt_00020_004_25_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
-      </div>
-      <div class="col-2">
-        <img src="./vis/phyre/pred_00020_004_25_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
-      </div>
-      <div class="col-2">
-        <img src="./vis/phyre/gt_00024_048_2_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
-      </div>
-      <div class="col-2">
-        <img src="./vis/phyre/pred_00024_048_2_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
-      </div>
-    </div>
-    <div class="row no-gutters">
-      <div class="col-2">
-        <img src="./vis/phyre/gt_00016_609_25_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
-      </div>
-      <div class="col-2">
-        <img src="./vis/phyre/pred_00016_609_25_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
-      </div>
-      <div class="col-2">
-        <img src="./vis/phyre/gt_00020_044_6_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
-      </div>
-      <div class="col-2">
-        <img src="./vis/phyre/pred_00020_044_6_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
-      </div>
-      <div class="col-2">
-        <img src="./vis/phyre/gt_00024_139_4_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
-      </div>
-      <div class="col-2">
-        <img src="./vis/phyre/pred_00024_139_4_000_rgb.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <img src="./gifs/phyre/crop/pred_00006_033_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/mask/pred_00006_033_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/pred_00006_033_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/gt_00006_033_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="gap-10"></div>
-    <center><b><span style="font-size:18px"> ShapeStacks </span></b></center>
+
+    <div class="row no-gutters">
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <img src="./gifs/phyre/crop/pred_00008_177_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/mask/pred_00008_177_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/pred_00008_177_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/gt_00008_177_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <img src="./gifs/phyre/crop/pred_00012_071_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/mask/pred_00012_071_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/pred_00012_071_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/gt_00012_071_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="gap-10"></div>
 
     <div class="row no-gutters">
-      <div class="col-2">
-        <center> Ground-Truth </center>
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <img src="./gifs/phyre/crop/pred_00013_074_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/mask/pred_00013_074_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/pred_00013_074_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/gt_00013_074_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+        </div>
       </div>
-      <div class="col-2">
-        <center> Prediction </center>
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <img src="./gifs/phyre/crop/pred_00016_844_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/mask/pred_00016_844_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/pred_00016_844_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/gt_00016_844_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+        </div>
       </div>
-      <div class="col-2">
-        <center> Ground-Truth </center>
+    </div>
+
+    <div class="gap-10"></div>
+
+    <div class="row no-gutters">
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <img src="./gifs/phyre/crop/pred_00018_192_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/mask/pred_00018_192_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/pred_00018_192_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/gt_00018_192_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+        </div>
       </div>
-      <div class="col-2">
-        <center> Prediction </center>
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <img src="./gifs/phyre/crop/pred_00005_111_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/mask/pred_00005_111_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/pred_00005_111_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/gt_00005_111_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+        </div>
       </div>
-      <div class="col-2">
-        <center> Ground-Truth </center>
+    </div>
+
+    <div class="gap-10"></div>
+
+    <div class="row no-gutters">
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <img src="./gifs/phyre/crop/pred_00021_115_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/mask/pred_00021_115_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/pred_00021_115_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/gt_00021_115_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+        </div>
       </div>
-      <div class="col-2">
-        <center> Prediction </center>
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <img src="./gifs/phyre/crop/pred_00024_048_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/mask/pred_00024_048_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/pred_00024_048_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/gt_00024_048_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gap-10"></div>
+
+    <div class="row no-gutters">
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <img src="./gifs/phyre/crop/pred_00020_010_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/mask/pred_00020_010_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/pred_00020_010_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/gt_00020_010_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <img src="./gifs/phyre/crop/pred_00019_244_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/mask/pred_00019_244_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/pred_00019_244_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/gt_00019_244_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gap-10"></div>
+
+    <div class="row no-gutters">
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <img src="./gifs/phyre/crop/pred_00017_129_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/mask/pred_00017_129_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/pred_00017_129_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/gt_00017_129_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <img src="./gifs/phyre/crop/pred_00015_016_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/mask/pred_00015_016_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/pred_00015_016_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/gt_00015_016_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gap-10"></div>
+
+    <div class="row no-gutters">
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <img src="./gifs/phyre/crop/pred_00014_214_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/mask/pred_00014_214_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/pred_00014_214_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/gt_00014_214_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <img src="./gifs/phyre/crop/pred_00011_841_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/mask/pred_00011_841_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/pred_00011_841_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/gt_00011_841_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gap-10"></div>
+
+    <div class="row no-gutters">
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <img src="./gifs/phyre/crop/pred_00010_508_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/mask/pred_00010_508_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/pred_00010_508_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/gt_00010_508_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <img src="./gifs/phyre/crop/pred_00009_930_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/mask/pred_00009_930_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/pred_00009_930_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyre/ours/gt_00009_930_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gap-30"></div>
+
+    <center><b><span style="font-size:20px"> PHYRE (cross-task generalization) </span></b></center>
+
+    <div class="gap-10"></div>
+
+    <p> We show our prediction results and baseline prediction results on the test set of PHYRE (cross-task generalization, fold 0). Given the first image and the objects' bounding boxes, we predict the future bounding boxes and masks for each moving objects.
+      The backgrounds (colored purple and black) is taken from the input image. The environments shown here is not seen during training.</p>
+
+    <div class="row no-gutters">
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <center> CVP </center>
+          </div>
+          <div class="col-3">
+            <center> OM </center>
+          </div>
+          <div class="col-3">
+            <center> Ours </center>
+          </div>
+          <div class="col-3">
+            <center> GT </center>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <center> CVP </center>
+          </div>
+          <div class="col-3">
+            <center> OM </center>
+          </div>
+          <div class="col-3">
+            <center> Ours </center>
+          </div>
+          <div class="col-3">
+            <center> GT </center>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gap-10"></div>
+
+    <div class="row no-gutters">
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <img src="./gifs/phyrec/crop/pred_00014_123_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyrec/mask/pred_00014_123_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyrec/ours/pred_00014_123_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyrec/ours/gt_00014_123_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <img src="./gifs/phyrec/crop/pred_00014_528_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyrec/mask/pred_00014_528_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyrec/ours/pred_00014_528_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyrec/ours/gt_00014_528_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gap-10"></div>
+
+    <div class="row no-gutters">
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <img src="./gifs/phyrec/crop/pred_00015_257_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyrec/mask/pred_00015_257_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyrec/ours/pred_00015_257_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyrec/ours/gt_00015_257_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <img src="./gifs/phyrec/crop/pred_00015_337_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyrec/mask/pred_00015_337_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyrec/ours/pred_00015_337_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyrec/ours/gt_00015_337_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gap-10"></div>
+
+    <div class="row no-gutters">
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <img src="./gifs/phyrec/crop/pred_00019_273_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyrec/mask/pred_00019_273_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyrec/ours/pred_00019_273_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyrec/ours/gt_00019_273_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <img src="./gifs/phyrec/crop/pred_00019_296_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyrec/mask/pred_00019_296_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyrec/ours/pred_00019_296_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/phyrec/ours/gt_00019_296_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gap-30"></div>
+
+    <center><b><span style="font-size:20px"> Real-World Billiard </span></b></center>
+
+    <div class="gap-20"></div>
+
+    <div class="row no-gutters">
+      <div class="col-3">
+        <center> Ours </center>
+      </div>
+      <div class="col-3">
+        <center> GT </center>
+      </div>
+      <div class="col-3">
+        <center> Ours </center>
+      </div>
+      <div class="col-3">
+        <center> GT </center>
       </div>
     </div>
 
     <div class="row no-gutters">
-      <div class="col-2">
-        <img src="./vis/shapestack/gt_0007_000.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      <div class="col-3">
+        <img src="./gifs/realb/pred_009_015.gif" style="max-width:95%;border:1px solid #021a40;">
       </div>
-      <div class="col-2">
-        <img src="./vis/shapestack/pred_0007_000.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      <div class="col-3">
+        <img src="./gifs/realb/gt_009_015.gif" style="max-width:95%;border:1px solid #021a40;">
       </div>
-      <div class="col-2">
-        <img src="./vis/shapestack/gt_0016_000.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      <div class="col-3">
+        <img src="./gifs/realb/pred_009_031.gif" style="max-width:95%;border:1px solid #021a40;">
       </div>
-      <div class="col-2">
-        <img src="./vis/shapestack/pred_0016_000.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
-      </div>
-      <div class="col-2">
-        <img src="./vis/shapestack/gt_0029_000.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
-      </div>
-      <div class="col-2">
-        <img src="./vis/shapestack/pred_0029_000.gif" style="margin:1em;max-width:95%;border:1px solid #021a40;">
+      <div class="col-3">
+        <img src="./gifs/realb/gt_009_031.gif" style="max-width:95%;border:1px solid #021a40;">
       </div>
     </div>
+
+    <div class="gap-10"></div>
+
+    <div class="row no-gutters">
+      <div class="col-3">
+        <img src="./gifs/realb/pred_009_063.gif" style="max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-3">
+        <img src="./gifs/realb/gt_009_063.gif" style="max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-3">
+        <img src="./gifs/realb/pred_059_033.gif" style="max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-3">
+        <img src="./gifs/realb/gt_059_033.gif" style="max-width:95%;border:1px solid #021a40;">
+      </div>
+    </div>
+
+    <div class="gap-10"></div>
+
+    <div class="row no-gutters">
+      <div class="col-3">
+        <img src="./gifs/realb/pred_039_038.gif" style="max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-3">
+        <img src="./gifs/realb/gt_039_038.gif" style="max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-3">
+        <img src="./gifs/realb/pred_049_011.gif" style="max-width:95%;border:1px solid #021a40;">
+      </div>
+      <div class="col-3">
+        <img src="./gifs/realb/gt_049_011.gif" style="max-width:95%;border:1px solid #021a40;">
+      </div>
+    </div>
+
+    <div class="gap-30"></div>
+
+    <center><b><span style="font-size:20px"> Simulated Billiard </span></b></center>
+
+    <div class="gap-20"></div>
+
+    <div class="row no-gutters">
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <center> Ours </center>
+          </div>
+          <div class="col-3">
+            <center> GT </center>
+          </div>
+          <div class="col-3">
+            <center> Ours </center>
+          </div>
+          <div class="col-3">
+            <center> GT </center>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <center> Ours </center>
+          </div>
+          <div class="col-3">
+            <center> GT </center>
+          </div>
+          <div class="col-3">
+            <center> Ours </center>
+          </div>
+          <div class="col-3">
+            <center> GT </center>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gap-10"></div>
+
+    <div class="row no-gutters">
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <img src="./gifs/simb/pred_00002_00037.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/simb/gt_00002_00037.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/simb/pred_00008_00047.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/simb/gt_00008_00047.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <img src="./gifs/simb/pred_00011_00048.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/simb/gt_00011_00048.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/simb/pred_00013_00036.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/simb/gt_00013_00036.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gap-10"></div>
+
+    <div class="row no-gutters">
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <img src="./gifs/simb/pred_00014_00033.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/simb/gt_00014_00033.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/simb/pred_00020_00054.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/simb/gt_00020_00054.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <img src="./gifs/simb/pred_00021_00013.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/simb/gt_00021_00013.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/simb/pred_00024_00011.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/simb/gt_00024_00011.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gap-30"></div>
+
+    <center><b><span style="font-size:20px"> ShapeStacks </span></b></center>
+
+    <div class="gap-20"></div>
+
+    <div class="row no-gutters">
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <center> Ours </center>
+          </div>
+          <div class="col-3">
+            <center> GT </center>
+          </div>
+          <div class="col-3">
+            <center> Ours </center>
+          </div>
+          <div class="col-3">
+            <center> GT </center>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <center> Ours </center>
+          </div>
+          <div class="col-3">
+            <center> GT </center>
+          </div>
+          <div class="col-3">
+            <center> Ours </center>
+          </div>
+          <div class="col-3">
+            <center> GT </center>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row no-gutters">
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <img src="./gifs/ss/pred_0163_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/ss/gt_0163_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/ss/pred_0120_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/ss/gt_0120_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <img src="./gifs/ss/pred_0045_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/ss/gt_0045_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/ss/pred_0016_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+          <div class="col-3">
+            <img src="./gifs/ss/gt_0016_000.gif" style="max-width:95%;border:1px solid #021a40;">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gap-20"></div>
 
     <hr>
 
