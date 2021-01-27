@@ -90,7 +90,15 @@ Each of the data is a video sequence from a template under different chosen acti
 ```
 sh scripts/test_plan.sh PHYRE_1fps_p100n400 rpcin ${YOUR_PRED_MODEL} None 0 proposal
 ```
-This usually takes a long time. Similar as the scene cache above, you can download the cache for inital bounding box locations for each scene. But note that, the cache is correct only when you run the exactly same script as we provided. Otherwise the sampled action order may be different.
+This usually takes really a long time. In practise, what I did is to run 25 python process in parallel by using the following command line trick:
+```
+sh scripts/test_plan.sh PHYRE_1fps_p100n400 rpcin ${YOUR_PRED_MODEL} None 0 proposal 0 1 &
+# ...
+# note the '&' sign
+# all of the same command by just with the last two number changed. From (0, 1), (1, 2), ... (24, 25)
+# ...
+sh scripts/test_plan.sh PHYRE_1fps_p100n400 rpcin ${YOUR_PRED_MODEL} None 0 proposal 24 25
+```
 
 After doing that, now you can train your classification model by running this script:
 ```
