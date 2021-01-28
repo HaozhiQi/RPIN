@@ -116,7 +116,7 @@ class PlannerPHYRE(object):
                 all_rois.append(rois)
 
                 if len(all_data) % batched_pred == 0 or act_id == len(acts) - 1:
-                    conf_t = self.batch_score(all_data, all_rois, all_image, objs_color, task)
+                    conf_t = self.batch_score(all_data, all_rois, all_image, objs_color)
                     confs = confs + conf_t
                     all_data, all_rois, all_image = [], [], []
 
