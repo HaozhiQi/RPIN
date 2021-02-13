@@ -33,7 +33,7 @@ data/PHYRE_1fps_p100n400/full/    # full image sequences for each task
 
 ### 1.2 Evaluate Our Prediction Model
 
-**Note that this model is trained with PRED_SIZE_TRAIN = 10. For models trained with PRED_SIZE_TRAIN = 5 and PRED_SIZE_TEST = 10, please refer to our [MODEL_ZOO](docs/MODEL_ZOO.md).**
+**Note that this model is trained with PRED_SIZE_TRAIN = 10. For models trained with PRED_SIZE_TRAIN = 5 and PRED_SIZE_TEST = 10, please refer to our [MODEL_ZOO](MODEL_ZOO.md).**
 
 You can download our pre-trained RPIN model using the following script:
 ```
