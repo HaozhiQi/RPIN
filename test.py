@@ -40,7 +40,7 @@ def main():
         # torch.backends.cudnn.enabled = False
         torch.backends.cudnn.deterministic = True
         torch.cuda.manual_seed(0)
-        num_gpus = 1  # torch.cuda.device_count()
+        num_gpus = torch.cuda.device_count()
         print('Use {} GPUs'.format(num_gpus))
     else:
         assert NotImplementedError
@@ -57,6 +57,7 @@ def main():
 
     if args.eval == 'plan' or args.eval == 'proposal':
         assert 'PHYRE' in C.DATA_ROOT
+        assert num_gpus == 1, 'multi-gpu support is not avaialbe for planning tasks'
         model = eval(args.predictor_arch + '.Net')()
         model.to(torch.device('cuda'))
         model = torch.nn.DataParallel(
@@ -91,20 +92,20 @@ def main():
     print('initialize dataset')
     split_name = 'test'
     val_set = eval(f'{C.DATASET_ABS}')(data_root=C.DATA_ROOT, split=split_name, image_ext=C.RPIN.IMAGE_EXT)
-    batch_size = 1 if C.RPIN.VAE else C.SOLVER.BATCH_SIZE
+    batch_size = 1 if C.RPIN.VAE else C.SOLVER.BATCH_SIZE * num_gpus
     val_loader = DataLoader(val_set, batch_size=batch_size, num_workers=16)
 
     model = eval(args.predictor_arch + '.Net')()
     model.to(torch.device('cuda'))
     model = torch.nn.DataParallel(
-        model, device_ids=[0]
+        model, device_ids=list(range(args.gpus.count(',') + 1))
     )
     cp = torch.load(args.predictor_init, map_location=f'cuda:0')
     model.load_state_dict(cp['model'])
     tester = PredEvaluator(
         device=torch.device('cuda'),
         val_loader=val_loader,
-        num_gpus=1,
+        num_gpus=num_gpus,
         model=model,
         num_plot_image=args.plot_image,
         output_dir=output_dir,
