@@ -1,5 +1,7 @@
 # Region Proposal Interaction Network
 
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/learning-long-term-visual-dynamics-with/visual-reasoning-on-phyre-1b-cross)](https://paperswithcode.com/sota/visual-reasoning-on-phyre-1b-cross?p=learning-long-term-visual-dynamics-with) [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/learning-long-term-visual-dynamics-with/visual-reasoning-on-phyre-1b-within)](https://paperswithcode.com/sota/visual-reasoning-on-phyre-1b-within?p=learning-long-term-visual-dynamics-with)
+
 This repository is an official PyTorch implementation of the ICLR paper:
 
 <b>Learning Long-term Visual Dynamics with Region Proposal Interaction Networks</b> <br>
