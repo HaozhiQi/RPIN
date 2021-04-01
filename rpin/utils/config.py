@@ -78,12 +78,7 @@ _C.RPIN.N_EXTRA_AFFECTOR_F = 0
 _C.RPIN.N_EXTRA_AGGREGATOR_F = 0
 _C.RPIN.EXTRA_F_KERNEL = 3
 _C.RPIN.EXTRA_F_PADDING = 1
-
-# ---------------------------------------------------------------------------- #
-# PHYRE Classifier Model
-# ---------------------------------------------------------------------------- #
-_C.PCLS = CfgNode()
-_C.PCLS.ARCH = 'resnet18'
+_C.RPIN.SEQ_CLS_LOSS_WEIGHT = 0.0
 
 # ---------------------------------------------------------------------------- #
 # Misc options

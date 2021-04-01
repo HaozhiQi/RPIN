@@ -19,7 +19,6 @@ def arg_parse():
     parser.add_argument('--cfg', required=True, help='path to config file', type=str)
     parser.add_argument('--predictor-init', type=str, help='', default=None)
     parser.add_argument('--predictor-arch', type=str, default=None)
-    parser.add_argument('--cls-init', type=str, default=None)
     parser.add_argument('--plot-image', type=int, default=0, help='how many images are plotted')
     parser.add_argument('--gpus', type=str)
     parser.add_argument('--eval', type=str, default=None)
@@ -55,8 +54,8 @@ def main():
         cache_name += args.predictor_init.split('/')[-2]
     output_dir = os.path.join(C.OUTPUT_DIR, cache_name)
 
-    if args.eval == 'plan' or args.eval == 'proposal':
-        assert 'PHYRE' in C.DATA_ROOT
+    if args.eval == 'plan':
+        assert 'reasoning' in C.DATA_ROOT
         assert num_gpus == 1, 'multi-gpu support is not avaialbe for planning tasks'
         model = eval(args.predictor_arch + '.Net')()
         model.to(torch.device('cuda'))
@@ -66,26 +65,14 @@ def main():
         # load prediction model
         cp = torch.load(args.predictor_init, map_location='cuda:0')
         model.load_state_dict(cp['model'])
-        # load the classification model
-        if args.eval == 'proposal':
-            cls_model = None
-        if args.eval == 'plan':
-            cls_model = dqn.ResNet18(4).to(torch.device('cuda'))
-            cp = torch.load(args.cls_init, map_location='cuda:0')
-            cls_model.load_state_dict(cp['model'])
 
         tester = PlannerPHYRE(
             device=torch.device(f'cuda'),
             num_gpus=1,
             model=model,
-            score_model=cls_model,
             output_dir=output_dir,
         )
-
-        if args.eval == 'proposal':
-            tester.gen_proposal(args.start_id, args.end_id)
-        if args.eval == 'plan':
-            tester.test(args.start_id, args.end_id)
+        tester.test(args.start_id, args.end_id)
         return
 
     # --- setup data loader

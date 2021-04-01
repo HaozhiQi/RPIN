@@ -1,12 +1,14 @@
 # PHYRE Dataset
 
+2021-03-31 Update: I made a major refactor about the PHYRE dataset, and it significantly simplifies the physical reasoning pipeline. However, some corner cases may not be thoroughly tested because of the limited time. If you find any problems, please raise an issue in the github.
+
 In this document, we provide a step-by-step instruction on:
 - How to evaluate our pretrained prediction model and the corresponding planning model for the PHYRE dataset.
 - How to train those models yourself.
 
-Throughout this file, we will use **within-task generalization setting and fold 0** as an example. Other models (both for within-task generalization and cross-task generalization) are in the same format, they can be downloaded and evaluated by simply chage the model name in the following scripts.
+Throughout this file, we will use **within-task generalization setting and fold 0** as an example. Other models (both for within-task generalization and cross-task generalization) are in the same format, they can be downloaded and evaluated by simply changing the model name in the following scripts.
 
-## 1. Evaluation
+## 1. Evaluate Our Prediction Models
 
 ### 1.1 Download Our Dataset
 
@@ -31,35 +33,33 @@ data/PHYRE_1fps_p100n400/full/    # full image sequences for each task
 
 ---
 
-### 1.2 Evaluate Our Prediction Model
-
-**Note that this model is trained with PRED_SIZE_TRAIN = 10. For models trained with PRED_SIZE_TRAIN = 5 and PRED_SIZE_TEST = 10, please refer to our [MODEL_ZOO](MODEL_ZOO.md).**
+### 1.2 Evaluate
 
 You can download our pre-trained RPIN model using the following script:
 ```
-sh scripts/download.sh 1h-zEsOM0FyPog1Urh5slnpKuKXxG16bd outputs/phys/PHYRE_1fps_p100n400/W0_rpcin.zip
-unzip outputs/phys/PHYRE_1fps_p100n400/W0_rpcin.zip -d outputs/phys/PHYRE_1fps_p100n400/
+sh scripts/download.sh 10g0U00-pv2dRH2PjfrSi1jlnF4OewrX4 outputs/phys/PHYRE_1fps_p100n400/W0_rpcin_t5.zip
+unzip outputs/phys/PHYRE_1fps_p100n400/W0_rpcin_t5.zip -d outputs/phys/PHYRE_1fps_p100n400/
 ```
 
 Run the following for evaluation:
 ```
-sh scripts/test_pred.sh PHYRE_1fps_p100n400 rpcin W0_rpcin ${GPU_ID}
+sh scripts/test_pred.sh PHYRE_1fps_p100n400 rpcin W0_rpcin_t5 ${GPU_ID}
 ```
-The L2 error should be 3.526 (x 1e-3).
+The L2 error should be 1.308 (x 1e-3) for [0, T] and 11.060 (x 1e-3) for [T, 2T] (T=5).
 
 ---
 
 ### 1.3 Evaluate Our Planning Model
 
-To evaluate the planning model, you need to download our pre-trained trajectory classifier:
+To evaluate the planning model, you need to download our prediction model with the task classifier:
 ```
-sh scripts/download.sh 1kRiuzEHU2t4K2W_rp2jo5KZr6Lyhq78B outputs/cls/PHYRE_1fps_p100n400/W0_res18.zip
-unzip outputs/cls/PHYRE_1fps_p100n400/W0_res18.zip -d outputs/cls/PHYRE_1fps_p100n400/
+sh scripts/download.sh 1ho6ndZH7BlwNfAyOSqVlS__zYlgpZMhy outputs/phys/reasoning/w0.zip
+unzip outputs/cls/PHYRE_1fps_p100n400/w0.zip -d outputs/phys/reasoning/
 ```
 
 Run the following command for evaluation:
 ```
-sh scripts/test_plan.sh PHYRE_1fps_p100n400 rpcin W0_rpcin W0_res18 ${GPU_ID} plan
+sh scripts/test_plan.sh reasoning rpcin w0 ${GPU_ID} plan
 ```
 
 This is usually a very slow process (more than 24 hours in my machine). A large part of the reason is that it takes time to get the initial bounding boxes from the simulator. Therefore, we recommend to download our cache for the intial bounding boxes:
@@ -67,7 +67,7 @@ This is usually a very slow process (more than 24 hours in my machine). A large 
 sh scripts/download.sh 1KTvLa7WSfyd4Y7d-WUKmTgNde67HAcsU ./cache.zip
 unzip cache.zip -d ./
 ```
-This will greatly improve the performance. However, if you are still not satisified, you can split the 25 tasks into different groups. And then evaluate them using different python process.
+This will greatly improve the performance (about 4-5 hours in my machine). However, if you are still not satisified, you can split the 25 tasks into different groups. And then evaluate them using different python process.
 
 ---
 
@@ -77,32 +77,18 @@ This will greatly improve the performance. However, if you are still not satisif
 
 You can train your prediction model by:
 ```
-# Feel free to change rpcin_within_t10 to other yaml in that folder
-python train.py --cfg configs/phyre/pred/rpcin_within_t10.yaml --gpus 0,1 --output ${OUTPUT_NAME}
+# Feel free to change rpcin_within_pred to other yaml in that folder
+python train.py --cfg configs/phyre/rpcin_within_pred.yaml --gpus 0,1 --output ${OUTPUT_NAME}
 ```
 
 ---
 
-### 2.2 Train Your Classification Model
+### 2.2 Train Your Prediction Model for Physical Reasoning
 
-This is a bit complicated. Firstly, you need to generate the training / testing set for the classification model.
-Each of the data is a video sequence from a template under different chosen action. You can do this by running:
+You can train your prediction model by:
 ```
-sh scripts/test_plan.sh PHYRE_1fps_p100n400 rpcin ${YOUR_PRED_MODEL} None 0 proposal
-```
-This usually takes really a long time. In practise, what I did is to run 25 python process in parallel by using the following command line trick:
-```
-sh scripts/test_plan.sh PHYRE_1fps_p100n400 rpcin ${YOUR_PRED_MODEL} None 0 proposal 0 1 &
-# ...
-# note the '&' sign
-# all of the same command by just with the last two number changed. From (0, 1), (1, 2), ... (24, 25)
-# ...
-sh scripts/test_plan.sh PHYRE_1fps_p100n400 rpcin ${YOUR_PRED_MODEL} None 0 proposal 24 25
-```
-
-After doing that, now you can train your classification model by running this script:
-```
-python train_cls.py --cfg configs/phyre/cls/res18.yaml --gpus 0 --output {OUTPUT_NAME}
+# Feel free to change rpcin_within_pred to other yaml in that folder
+python train.py --cfg configs/phyre/rpcin_within_plan.yaml --gpus 0,1 --output ${OUTPUT_NAME}
 ```
 
 ---

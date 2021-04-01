@@ -107,4 +107,4 @@ outputs
 .idea
 _cache_*
 *.jpg
-
+*cache*

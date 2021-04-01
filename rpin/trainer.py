@@ -31,6 +31,7 @@ class Trainer(object):
         self.epochs = 0
         self.max_iters = max_iters
         self.val_interval = C.SOLVER.VAL_INTERVAL
+        self.fg_correct, self.bg_correct, self.fg_num, self.bg_num = 0, 0, 0, 0
         # loss settings
         self._setup_loss()
         # timer setting
@@ -46,7 +47,7 @@ class Trainer(object):
             self.epochs += 1
 
     def train_epoch(self):
-        for batch_idx, (data, data_t, rois, gt_boxes, gt_masks, valid, g_idx) in enumerate(self.train_loader):
+        for batch_idx, (data, data_t, rois, gt_boxes, gt_masks, valid, g_idx, seq_l) in enumerate(self.train_loader):
             self._adjust_learning_rate()
             data, data_t = data.to(self.device), data_t.to(self.device)
             rois = xyxy_to_rois(rois, batch=data.shape[0], time_step=data.shape[1], num_devices=self.num_gpus)
@@ -57,6 +58,7 @@ class Trainer(object):
                 'boxes': gt_boxes.to(self.device),
                 'masks': gt_masks.to(self.device),
                 'valid': valid.to(self.device),
+                'seq_l': seq_l.to(self.device),
             }
             loss = self.loss(outputs, labels, 'train')
             loss.backward()
@@ -71,6 +73,7 @@ class Trainer(object):
             print_msg += f"{mean_loss:.3f} | "
             print_msg += f" | ".join(
                 ["{:.3f}".format(self.losses[name] * 1e3 / self.loss_cnt) for name in self.loss_name])
+            print_msg += f" | {self.fg_correct / self.fg_num:.3f} | {self.bg_correct / self.bg_num:.3f}"
             speed = self.loss_cnt / (timer() - self.time)
             eta = (self.max_iters - self.iterations) / speed / 3600
             print_msg += f" | speed: {speed:.1f} | eta: {eta:.2f} h"
@@ -97,7 +100,7 @@ class Trainer(object):
             box_p_step_losses = [0.0 for _ in range(self.ptest_size)]
             masks_step_losses = [0.0 for _ in range(self.ptest_size)]
 
-        for batch_idx, (data, _, rois, gt_boxes, gt_masks, valid, g_idx) in enumerate(self.val_loader):
+        for batch_idx, (data, _, rois, gt_boxes, gt_masks, valid, g_idx, seq_l) in enumerate(self.val_loader):
             tprint(f'eval: {batch_idx}/{len(self.val_loader)}')
             with torch.no_grad():
 
@@ -107,6 +110,7 @@ class Trainer(object):
                     'boxes': gt_boxes.to(self.device),
                     'masks': gt_masks.to(self.device),
                     'valid': valid.to(self.device),
+                    'seq_l': seq_l.to(self.device),
                 }
 
                 outputs = self.model(data, rois, num_rollouts=self.ptest_size, g_idx=g_idx, phase='test')
@@ -151,6 +155,7 @@ class Trainer(object):
             self.best_mean = mean_loss
 
         print_msg += f" | ".join(["{:.3f}".format(self.losses[name] * 1e3 / self.loss_cnt) for name in self.loss_name])
+        print_msg += f" | {self.fg_correct / (self.fg_num + 1e-9):.3f} | {self.bg_correct / (self.bg_num + 1e-9):.3f}"
         print_msg += (" " * (os.get_terminal_size().columns - len(print_msg) - 10))
         self.logger.info(print_msg)
 
@@ -201,6 +206,22 @@ class Trainer(object):
             mask_loss = ((mask_loss * tau) / tau.sum(axis=0, keepdims=True)).sum()
             mask_loss = mask_loss * C.RPIN.MASK_LOSS_WEIGHT
 
+        seq_loss = 0
+        if C.RPIN.SEQ_CLS_LOSS_WEIGHT > 0:
+            seq_loss = F.binary_cross_entropy(outputs['score'], labels['seq_l'], reduction='none')
+            self.losses['seq'] += seq_loss.sum().item()
+            seq_loss = seq_loss.mean() * C.RPIN.SEQ_CLS_LOSS_WEIGHT
+            # calculate accuracy
+            s = (outputs['score'] >= 0.5).eq(labels['seq_l'])
+            fg_correct = s[labels['seq_l'] == 1].sum().item()
+            bg_correct = s[labels['seq_l'] == 0].sum().item()
+            fg_num = (labels['seq_l'] == 1).sum().item()
+            bg_num = (labels['seq_l'] == 0).sum().item()
+            self.fg_correct += fg_correct
+            self.bg_correct += bg_correct
+            self.fg_num += fg_num
+            self.bg_num += bg_num
+
         kl_loss = 0
         if C.RPIN.VAE and phase == 'train':
             kl_loss = outputs['kl']
@@ -213,7 +234,7 @@ class Trainer(object):
         tau = init_tau + (self.iterations / self.max_iters) * (1 - init_tau)
         tau = torch.pow(tau, torch.arange(pred_size, out=torch.FloatTensor()))[:, None].to('cuda')
         loss = ((loss * tau) / tau.sum(axis=0, keepdims=True)).sum()
-        loss = loss + mask_loss + kl_loss
+        loss = loss + mask_loss + kl_loss + seq_loss
 
         return loss
 
@@ -234,6 +255,8 @@ class Trainer(object):
             self.loss_name += ['m_1', 'm_2']
         if C.RPIN.VAE:
             self.loss_name += ['kl']
+        if C.RPIN.SEQ_CLS_LOSS_WEIGHT:
+            self.loss_name += ['seq']
         self._init_loss()
 
     def _init_loss(self):
@@ -242,6 +265,7 @@ class Trainer(object):
         self.box_s_step_losses = [0.0 for _ in range(self.ptest_size)]
         self.masks_step_losses = [0.0 for _ in range(self.ptest_size)]
         # an statistics of each validation
+        self.fg_correct, self.bg_correct, self.fg_num, self.bg_num = 0, 0, 0, 0
         self.loss_cnt = 0
         self.time = timer()
 

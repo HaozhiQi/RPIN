@@ -12,7 +12,10 @@ International Conference on Learning Representations (ICLR), 2021 <br>
 [[Website](https://haozhiqi.github.io/RPIN)], [[Paper](http://arxiv.org/abs/2008.02265)]
 
 
-![image](https://haozhiqi.github.io/RPIN/figs/teaser.png)
+Ground-Truth            |  Our Prediction | Ground-Truth  | Our Prediction
+:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------: 
+![image](https://haozhi.io/RPIN/gifs/phyre/ours/gt_00023_470_000.gif)  |  ![image](https://haozhi.io/RPIN/gifs/phyre/ours/pred_00023_470_000.gif) | ![image](https://haozhi.io/RPIN/gifs/phyre/ours/gt_00022_537_000.gif) | ![image](https://haozhi.io/RPIN/gifs/phyre/ours/pred_00022_537_000.gif)
+
 
 ## Introduction
 
@@ -54,9 +57,9 @@ git clone https://github.com/HaozhiQi/RPIN
 cd RPIN
 ```
 
-### Data Preparation & Training & Evaluation 
+### Data Preparation & Training & Evaluation
 
-This codebase supports all of the four dataset we used in our paper. We provide the instructions for each dataset separately. Please see [PHYRE](docs/PHYRE.md), [SS](docs/SS.md), [RealB](docs/RealB.md), and [SimB](docs/SimB.md) for detailed instructions.
+This codebase supports all four datasets we used in our paper. We provide the instructions for each dataset separately. Please see [PHYRE](docs/PHYRE.md), [SS](docs/SS.md), [RealB](docs/RealB.md), and [SimB](docs/SimB.md) for detailed instructions.
 
 For results and models we provided in this codebase, see the [Model Zoo](docs/MODEL_ZOO.md).
 
@@ -71,3 +74,17 @@ If you find **RPIN** or this codebase helpful in your research, please consider 
   year={2021}
 }
 ```
+
+## Log of main updates:
+
+### 2021-03-31 (ICLR camera ready)
+
+Update the PHYRE reasoning results. Importantly, we remove the 2stage method for PHYRE reasoning, which significantly simplify the pipeline. See our camera ready version for detail. 
+
+### 2021-01-27 (ICLR version)
+
+Update the PHYRE reasoning results. Not it contains the full evaluation result for the benchmark.
+
+### 2020-08-05 (Init)
+
+Initial Release of this repo.

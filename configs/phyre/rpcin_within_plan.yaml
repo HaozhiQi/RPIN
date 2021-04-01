@@ -1,11 +1,11 @@
 OUTPUT_DIR: ./outputs/phys
-DATA_ROOT: 'data/PHYRE_1fps_p100n400/'
-DATASET_ABS: 'PHYRE'
+DATA_ROOT: 'data/planning/'
+DATASET_ABS: 'PHYREO'  # online version of PHYRE data loader
 PHYRE_PROTOCAL: 'within'
 PHYRE_FOLD: 0
 SOLVER:
   BASE_LR: 2.0e-4  # single GPU LR
-  WEIGHT_DECAY: 0.0
+  WEIGHT_DECAY: 3.0e-7
   SCHEDULER: 'cosine'
   MAX_ITERS: 6000000
   VAL_INTERVAL: 600000
@@ -48,3 +48,4 @@ RPIN:
   EXTRA_F_KERNEL: 3
   EXTRA_F_PADDING: 1
   IMAGE_EXT: '.npy'
+  SEQ_CLS_LOSS_WEIGHT: 0.02

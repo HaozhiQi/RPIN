@@ -38,7 +38,7 @@ class PredEvaluator(object):
             box_p_step_losses = [0.0 for _ in range(self.ptest_size)]
             masks_step_losses = [0.0 for _ in range(self.ptest_size)]
 
-        for batch_idx, (data, _, rois, gt_boxes, gt_masks, valid, g_idx) in enumerate(self.val_loader):
+        for batch_idx, (data, _, rois, gt_boxes, gt_masks, valid, g_idx, seq_l) in enumerate(self.val_loader):
             with torch.no_grad():
                 data = data.to(self.device)
                 rois = xyxy_to_rois(rois, batch=data.shape[0], time_step=data.shape[1], num_devices=self.num_gpus)
@@ -46,6 +46,7 @@ class PredEvaluator(object):
                     'boxes': gt_boxes.to(self.device),
                     'masks': gt_masks.to(self.device),
                     'valid': valid.to(self.device),
+                    'seq_l': seq_l.to(self.device),
                 }
                 outputs = self.model(data, rois, num_rollouts=self.ptest_size, g_idx=g_idx, phase='test')
                 self.loss(outputs, labels, 'test')
@@ -109,7 +110,7 @@ class PredEvaluator(object):
 
                         if 'PHYRE' in C.DATA_ROOT:
                             im_data = phyre.observations_to_float_rgb(np.load(video_name).astype(np.uint8))[..., ::-1]
-                            a, b, c = video_name.split('/')[5:8]
+                            a, b, c = video_name.split('/')[-3:]
                             output_name = f'{a}_{b}_{c.replace(".npy", "")}'
 
                             bg_image = np.load(video_name).astype(np.uint8)
@@ -151,6 +152,7 @@ class PredEvaluator(object):
         mean_loss = np.mean(np.array(self.box_p_step_losses[:self.ptest_size]) / self.loss_cnt) * 1e3
         print_msg += f"{mean_loss:.3f} | "
         print_msg += f" | ".join(["{:.3f}".format(self.losses[name] * 1e3 / self.loss_cnt) for name in self.loss_name])
+        print_msg += f" | {self.fg_correct / (self.fg_num + 1e-9):.3f} | {self.bg_correct / (self.bg_num + 1e-9):.3f}"
         pprint(print_msg)
 
     def loss(self, outputs, labels, phase):
@@ -183,7 +185,6 @@ class PredEvaluator(object):
             valid = labels['valid'][:, None, :]
             mask_loss = mask_loss * valid
             mask_loss = mask_loss.sum(2) / valid.sum(2)
-
             for i in range(pred_size):
                 self.masks_step_losses[i] += mask_loss[:, i].sum().item()
 
@@ -191,6 +192,21 @@ class PredEvaluator(object):
             m2_loss = self.masks_step_losses[self.ptrain_size:] if self.ptrain_size < self.ptest_size else 0
             self.losses['m_1'] = np.mean(m1_loss)
             self.losses['m_2'] = np.mean(m2_loss)
+
+        if C.RPIN.SEQ_CLS_LOSS_WEIGHT > 0:
+            seq_loss = F.binary_cross_entropy(outputs['score'], labels['seq_l'], reduction='none')
+            self.losses['seq'] += seq_loss.sum().item()
+            # calculate accuracy
+            s = (outputs['score'] >= 0.5).eq(labels['seq_l'])
+            fg_correct = s[labels['seq_l'] == 1].sum().item()
+            bg_correct = s[labels['seq_l'] == 0].sum().item()
+            fg_num = (labels['seq_l'] == 1).sum().item()
+            bg_num = (labels['seq_l'] == 0).sum().item()
+            self.fg_correct += fg_correct
+            self.bg_correct += bg_correct
+            self.fg_num += fg_num
+            self.bg_num += bg_num
+
         return
 
     def _setup_loss(self):
@@ -199,6 +215,8 @@ class PredEvaluator(object):
         self.loss_name += ['p_1', 'p_2', 's_1', 's_2']
         if C.RPIN.MASK_LOSS_WEIGHT:
             self.loss_name += ['m_1', 'm_2']
+        if C.RPIN.SEQ_CLS_LOSS_WEIGHT:
+            self.loss_name += ['seq']
         self._init_loss()
 
     def _init_loss(self):
@@ -207,4 +225,5 @@ class PredEvaluator(object):
         self.box_s_step_losses = [0.0 for _ in range(self.ptest_size)]
         self.masks_step_losses = [0.0 for _ in range(self.ptest_size)]
         # an statistics of each validation
+        self.fg_correct, self.bg_correct, self.fg_num, self.bg_num = 0, 0, 0, 0
         self.loss_cnt = 0

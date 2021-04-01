@@ -21,6 +21,7 @@ class Net(nn.Module):
         self.in_feat_dim = C.RPIN.IN_FEAT_DIM  # interaction net feature dimension
         self.num_objs = C.RPIN.MAX_NUM_OBJS
         self.mask_size = C.RPIN.MASK_SIZE
+        self.picked_state_list = [0, 3, 6, 9]
 
         # build image encoder
         self.backbone = build_backbone(C.RPIN.BACKBONE, self.ve_feat_dim, C.INPUT.IMAGE_CHANNEL)
@@ -66,6 +67,18 @@ class Net(nn.Module):
                 nn.Sigmoid(),
             )
 
+        if C.RPIN.SEQ_CLS_LOSS_WEIGHT > 0:
+            self.seq_feature = nn.Sequential(
+                nn.Linear(self.in_feat_dim * pool_size * pool_size, self.in_feat_dim * 4),
+                nn.ReLU(inplace=True),
+                nn.Linear(self.in_feat_dim * 4, self.in_feat_dim),
+                nn.ReLU(inplace=True),
+            )
+            self.seq_score = nn.Sequential(
+                nn.Linear(self.in_feat_dim * len(self.picked_state_list), 1),
+                nn.Sigmoid()
+            )
+
     def forward(self, x, rois, num_rollouts=10, g_idx=None, x_t=None, phase='train'):
         self.num_objs = rois.shape[2]
         # x: (b, t, c, h, w)
@@ -78,6 +91,7 @@ class Net(nn.Module):
         bbox_rollout = []
         mask_rollout = []
         state_list = [x[:, i] for i in range(self.time_step)]
+        state_list_buffer = [x[:, i] for i in range(self.time_step)]
         for i in range(num_rollouts):
             c = [self.graph[j](state_list[j], g_idx) for j in range(self.time_step)]
             all_c = torch.cat(c, 2)
@@ -89,6 +103,22 @@ class Net(nn.Module):
                 mask_rollout.append(mask)
             bbox_rollout.append(bbox)
             state_list = state_list[1:] + [s]
+            state_list_buffer.append(s)
+
+        seq_score = []
+        if C.RPIN.SEQ_CLS_LOSS_WEIGHT > 0:
+            # (p_l * b, o, feat, psz, psz)
+            state_list_buffer = torch.cat([state_list_buffer[pid] for pid in self.picked_state_list])
+            # (p_l, b, o, feat)
+            seq_feature = self.seq_feature(state_list_buffer.reshape(
+                len(self.picked_state_list) * batch_size, self.num_objs, -1)
+            ).reshape(len(self.picked_state_list), batch_size, self.num_objs, -1)
+            valid_seq = g_idx[:, ::self.num_objs - 1, [2]]
+            valid_seq = valid_seq[None]
+            # (p_l, b, feat)
+            seq_feature = (seq_feature * valid_seq).sum(dim=-2) / valid_seq.sum(dim=-2)
+            seq_feature = seq_feature.permute(1, 2, 0).reshape(batch_size, -1)
+            seq_score = self.seq_score(seq_feature).squeeze(1)
 
         bbox_rollout = torch.stack(bbox_rollout).permute(1, 0, 2, 3)
         bbox_rollout = bbox_rollout.reshape(-1, num_rollouts, self.num_objs, self.decoder_output)
@@ -100,6 +130,7 @@ class Net(nn.Module):
         outputs = {
             'boxes': bbox_rollout,
             'masks': mask_rollout,
+            'score': seq_score,
         }
         return outputs
 

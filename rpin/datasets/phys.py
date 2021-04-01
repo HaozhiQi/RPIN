@@ -75,6 +75,7 @@ class Phys(Dataset):
         gt_boxes[..., 1::2] /= self.input_height
         gt_boxes = gt_boxes.reshape(self.pred_size, -1, 4)
 
+        labels = torch.zeros(1)  # a fake variable used to make interface consistent
         data = torch.from_numpy(data.astype(np.float32))
         data_t = torch.from_numpy(data_t.astype(np.float32))
         rois = torch.from_numpy(rois.astype(np.float32))
@@ -82,7 +83,7 @@ class Phys(Dataset):
         gt_masks = torch.from_numpy(gt_masks.astype(np.float32))
         valid = torch.from_numpy(valid.astype(np.float32))
 
-        return data, data_t, rois, gt_boxes, gt_masks, valid, g_idx
+        return data, data_t, rois, gt_boxes, gt_masks, valid, g_idx, labels
 
     def _parse_image(self, video_name, vid_idx, img_idx):
         raise NotImplementedError
