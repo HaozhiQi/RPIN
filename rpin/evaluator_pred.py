@@ -40,6 +40,12 @@ class PredEvaluator(object):
 
         for batch_idx, (data, _, rois, gt_boxes, gt_masks, valid, g_idx, seq_l) in enumerate(self.val_loader):
             with torch.no_grad():
+
+                if C.RPIN.ROI_MASKING or C.RPIN.ROI_CROPPING:
+                    # data should be (b x t x o x c x h x w)
+                    data = data.permute((0, 2, 1, 3, 4, 5))  # (b, o, t, c, h, w)
+                    data = data.reshape((data.shape[0] * data.shape[1],) + data.shape[2:])  # (b*o, t, c, h, w)
+                
                 data = data.to(self.device)
                 rois = xyxy_to_rois(rois, batch=data.shape[0], time_step=data.shape[1], num_devices=self.num_gpus)
                 labels = {

@@ -80,6 +80,11 @@ _C.RPIN.EXTRA_F_KERNEL = 3
 _C.RPIN.EXTRA_F_PADDING = 1
 _C.RPIN.SEQ_CLS_LOSS_WEIGHT = 0.0
 
+_C.RPIN.ROI_MASKING = False
+_C.RPIN.ROI_CROPPING = False
+_C.RPIN.USE_VIN_FEAT = False
+_C.RPIN.ROI_CROPPING_R = 4
+
 # ---------------------------------------------------------------------------- #
 # Misc options
 # ---------------------------------------------------------------------------- #
