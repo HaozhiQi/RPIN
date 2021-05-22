@@ -73,7 +73,8 @@ class Trainer(object):
             print_msg += f"{mean_loss:.3f} | "
             print_msg += f" | ".join(
                 ["{:.3f}".format(self.losses[name] * 1e3 / self.loss_cnt) for name in self.loss_name])
-            print_msg += f" | {self.fg_correct / self.fg_num:.3f} | {self.bg_correct / self.bg_num:.3f}"
+            if C.RPIN.SEQ_CLS_LOSS_WEIGHT:
+                print_msg += f" | {self.fg_correct / self.fg_num:.3f} | {self.bg_correct / self.bg_num:.3f}"
             speed = self.loss_cnt / (timer() - self.time)
             eta = (self.max_iters - self.iterations) / speed / 3600
             print_msg += f" | speed: {speed:.1f} | eta: {eta:.2f} h"
@@ -155,7 +156,8 @@ class Trainer(object):
             self.best_mean = mean_loss
 
         print_msg += f" | ".join(["{:.3f}".format(self.losses[name] * 1e3 / self.loss_cnt) for name in self.loss_name])
-        print_msg += f" | {self.fg_correct / (self.fg_num + 1e-9):.3f} | {self.bg_correct / (self.bg_num + 1e-9):.3f}"
+        if C.RPIN.SEQ_CLS_LOSS_WEIGHT:
+            print_msg += f" | {self.fg_correct / (self.fg_num + 1e-9):.3f} | {self.bg_correct / (self.bg_num + 1e-9):.3f}"
         print_msg += (" " * (os.get_terminal_size().columns - len(print_msg) - 10))
         self.logger.info(print_msg)
 

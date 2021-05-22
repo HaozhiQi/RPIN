@@ -152,7 +152,8 @@ class PredEvaluator(object):
         mean_loss = np.mean(np.array(self.box_p_step_losses[:self.ptest_size]) / self.loss_cnt) * 1e3
         print_msg += f"{mean_loss:.3f} | "
         print_msg += f" | ".join(["{:.3f}".format(self.losses[name] * 1e3 / self.loss_cnt) for name in self.loss_name])
-        print_msg += f" | {self.fg_correct / (self.fg_num + 1e-9):.3f} | {self.bg_correct / (self.bg_num + 1e-9):.3f}"
+        if C.RPIN.SEQ_CLS_LOSS_WEIGHT:
+            print_msg += f" | {self.fg_correct / (self.fg_num + 1e-9):.3f} | {self.bg_correct / (self.bg_num + 1e-9):.3f}"
         pprint(print_msg)
 
     def loss(self, outputs, labels, phase):
