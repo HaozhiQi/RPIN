@@ -1,5 +1,10 @@
 # Region Proposal Interaction Network
 
+Note: This branch includes code to reproduce baseline results in paper (as requested by https://github.com/HaozhiQi/RPIN/issues/3). By the time of writing this note, we have not be able to comprehensively test the results due to the rather emergency request. If you find anything wrong, please email me or open an issue. For instructions, please go the the discussion in that issue.
+
+---
+
+
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/learning-long-term-visual-dynamics-with/visual-reasoning-on-phyre-1b-cross)](https://paperswithcode.com/sota/visual-reasoning-on-phyre-1b-cross?p=learning-long-term-visual-dynamics-with) [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/learning-long-term-visual-dynamics-with/visual-reasoning-on-phyre-1b-within)](https://paperswithcode.com/sota/visual-reasoning-on-phyre-1b-within?p=learning-long-term-visual-dynamics-with)
 
 This repository is an official PyTorch implementation of the ICLR paper:
