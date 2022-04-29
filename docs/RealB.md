@@ -13,7 +13,7 @@ We apologize for the inconvenience. Due to the YouTube's license issue, to obtai
 
 We will promptly reply with the download link. Then you can use the file_id we replied in the following command:
 ```
-sh scripts/download.sh ${F_ID_REPLIED} data/realb.zip
+gdown --id ${F_ID_REPLIED} -O data/realb.zip
 unzip data/realb.zip -d data/
 ```
 
@@ -21,7 +21,7 @@ unzip data/realb.zip -d data/
 
 You can download our pre-trained RPIN model using the following script:
 ```
-sh scripts/download.sh 1w8Id8UYfQcYhc3nh2_I6Qnkt56Qr29xS outputs/phys/realb/rpcin.zip
+gdown --id 1w8Id8UYfQcYhc3nh2_I6Qnkt56Qr29xS -O outputs/phys/realb/rpcin.zip
 unzip outputs/phys/realb/rpcin.zip -d outputs/phys/realb/
 ```
 

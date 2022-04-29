@@ -12,7 +12,7 @@ The ShapeStacks dataset is introduced in [CVP](https://github.com/JudyYe/CVP). W
 
 You can download our prepared ShapeStacks dataset using the following script:
 ```
-sh download.sh 1FYtwY03U_xg5lU8j1NHZdQXFDMH8Fjsy data/ss.zip
+gdown --id 1FYtwY03U_xg5lU8j1NHZdQXFDMH8Fjsy -O data/ss.zip
 unzip data/ss.zip -d data/
 ```
 The data structure should look like:
@@ -28,7 +28,7 @@ data/ss/ss4    # The ShapeStacks Testing set, containing videos with 4 stacked b
 
 You can download our pre-trained RPIN model using the following script:
 ```
-sh download.sh 1VufPAnn2uSeAe1I9KA-NctpvGTjuLscX outputs/phys/ss/rpcin.zip
+gdown --id 1VufPAnn2uSeAe1I9KA-NctpvGTjuLscX -O outputs/phys/ss/rpcin.zip
 unzip outputs/phys/ss/rpcin.zip -d outputs/phys/ss/
 ```
 Run the following for evaluation:

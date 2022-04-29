@@ -16,7 +16,7 @@ You can download our prepared PHYRE dataset using the following script:
 ```
 # md5sum: 9a9b4f7e484613b7a9091819c801d2e9
 # the zip file is ~15G and the whole dataset is ~100G
-sh scripts/download.sh 1gmnjF0R59yiaYLsBmLuLs6hYN_UEARpU data/PHYRE_1fps_p100n400.zip
+gdown --id 1gmnjF0R59yiaYLsBmLuLs6hYN_UEARpU -O data/PHYRE_1fps_p100n400.zip
 unzip data/PHYRE_1fps_p100n400.zip -d data/
 ```
 Here the name `1fps` means we use stride 60 to generate the phyre data (see [this link](https://github.com/facebookresearch/phyre/blob/920cd2cc2d7ee29c08ae6ebff8f0463c2245d603/src/simulator/task_utils.h#L25)), `p100n400` means when we sample action for a template of a task, we use 100 positive (successful) actions and 400 negative (failure) actions.
@@ -37,7 +37,7 @@ data/PHYRE_1fps_p100n400/full/    # full image sequences for each task
 
 You can download our pre-trained RPIN model using the following script:
 ```
-sh scripts/download.sh 10g0U00-pv2dRH2PjfrSi1jlnF4OewrX4 outputs/phys/PHYRE_1fps_p100n400/W0_rpcin_t5.zip
+gdown --id 10g0U00-pv2dRH2PjfrSi1jlnF4OewrX4 -O outputs/phys/PHYRE_1fps_p100n400/W0_rpcin_t5.zip
 unzip outputs/phys/PHYRE_1fps_p100n400/W0_rpcin_t5.zip -d outputs/phys/PHYRE_1fps_p100n400/
 ```
 
@@ -53,7 +53,7 @@ The L2 error should be 1.308 (x 1e-3) for [0, T] and 11.060 (x 1e-3) for [T, 2T]
 
 To evaluate the planning model, you need to download our prediction model with the task classifier:
 ```
-sh scripts/download.sh 1ho6ndZH7BlwNfAyOSqVlS__zYlgpZMhy outputs/phys/reasoning/w0.zip
+gdown --id 1ho6ndZH7BlwNfAyOSqVlS__zYlgpZMhy -O outputs/phys/reasoning/w0.zip
 unzip outputs/cls/PHYRE_1fps_p100n400/w0.zip -d outputs/phys/reasoning/
 ```
 
@@ -64,7 +64,7 @@ sh scripts/test_plan.sh reasoning rpcin w0 ${GPU_ID} plan
 
 This is usually a very slow process (more than 24 hours in my machine). A large part of the reason is that it takes time to get the initial bounding boxes from the simulator. Therefore, we recommend to download our cache for the intial bounding boxes:
 ```
-sh scripts/download.sh 1KTvLa7WSfyd4Y7d-WUKmTgNde67HAcsU ./cache.zip
+gdown --id 1KTvLa7WSfyd4Y7d-WUKmTgNde67HAcsU -O ./cache.zip
 unzip cache.zip -d ./
 ```
 This will greatly improve the performance (about 4-5 hours in my machine). However, if you are still not satisified, you can split the 25 tasks into different groups. And then evaluate them using different python process.

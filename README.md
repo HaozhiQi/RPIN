@@ -51,6 +51,8 @@ pip install yacs hickle tqdm matplotlib
 pip install opencv-python==3.4.2.17 
 # to evaluate phyre planning, you also need to also do
 pip install phyre
+# (optional) install gdown for downloading
+pip install gdown
 ```
 
 Then
@@ -78,6 +80,10 @@ If you find **RPIN** or this codebase helpful in your research, please consider 
 ```
 
 ## Log of main updates:
+
+### 2022-04-28 (Fix Download Script)
+
+Use gdown from pip to download dataset adn models.
 
 ### 2021-03-31 (ICLR camera ready)
 

@@ -8,7 +8,7 @@ In this document, we provide instructions on how to prepare data for training/te
 
 You could download the SimB dataset using the following script:
 ```
-sh scripts/download.sh 1ucTEMTyzWS1uaknrFU3gTpE3KnNlKAIf data/simb.zip
+gdown --id 1ucTEMTyzWS1uaknrFU3gTpE3KnNlKAIf -O data/simb.zip
 unzip data/simb.zip -d data/
 ```
 
@@ -29,7 +29,7 @@ python tools/prepare_billiard.py --split test
 Then, you can evaluate our pre-trained models and train your own models. To evaluate the pretrained models, download them using the following script or the following links for [RPCIN](https://drive.google.com/file/d/1vbJWlLCdT6GqTqry61TB3eEOGtDg9q-J/).
 
 ```
-sh scripts/download.sh 1vbJWlLCdT6GqTqry61TB3eEOGtDg9q-J outputs/phys/simb/rpcin.zip
+gdown --id 1vbJWlLCdT6GqTqry61TB3eEOGtDg9q-J -O outputs/phys/simb/rpcin.zip
 unzip outputs/phys/simb/rpcin.zip -d outputs/phys/simb/
 ```
 
