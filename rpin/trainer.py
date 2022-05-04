@@ -211,7 +211,7 @@ class Trainer(object):
         seq_loss = 0
         if C.RPIN.SEQ_CLS_LOSS_WEIGHT > 0:
             seq_loss = F.binary_cross_entropy(outputs['score'], labels['seq_l'], reduction='none')
-            self.losses['seq'] += seq_loss.sum().item()
+            self.losses['seq'] = seq_loss.sum().item()
             seq_loss = seq_loss.mean() * C.RPIN.SEQ_CLS_LOSS_WEIGHT
             # calculate accuracy
             s = (outputs['score'] >= 0.5).eq(labels['seq_l'])
