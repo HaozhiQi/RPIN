@@ -3,7 +3,6 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title> Learning Long-term Visual Dynamics with Region Proposal Interaction Networks </title>
     
@@ -14,8 +13,8 @@
         font-family: Arial;
         font-size:18px;
         margin: 60px auto;
+        margin-top: 0px;
         width: auto;
-        max-width: 1200px;
       }
 
       a:link,a:visited
@@ -29,8 +28,8 @@
 
       hr {
         border: 0;
-        height: 1.0px;
-        background-image: linear-gradient(to right, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3));
+        height: 2px;
+        background-image: linear-gradient(to right, rgba(0, 113, 188, 0.2), rgba(0, 0, 0, 0.1), rgba(0, 113, 188, 0.2));
       }
 
       .gap-30 {
@@ -62,115 +61,62 @@
         padding-right: 0;
         padding-left: 0;
       }
+
+      .jumbotron {
+        margin-bottom: 0;
+      }
     }
 
     </style>
 
   </head>
 
-  <div class="container">
+  <div class="jumbotron">
+    <div class="container">
 
-    <center><span style="font-size:36px"> Learning Long-term Visual Dynamics with <br> Region Proposal Interaction Networks </span></center>
+    <center><span style="font-size:42px"> Learning Long-term Visual Dynamics with <br> Region Proposal Interaction Networks </span></center>
     <div class="gap-20"></div>
 
     <!--------------------- Author Names --------------------->
-    <div class="row">
-      <div class="col-md-1">
-      </div>
-      <div class="col-md-2">
-        <center><span style="font-size:18px font-weight:800">
-          <a href="https://people.eecs.berkeley.edu/~hqi">Haozhi Qi<sup style="font-size:10px">1</sup></a>
-        </span></center>
-      </div>
+    <center>
+      <a href="https://people.eecs.berkeley.edu/~hqi" style="font-size:22px">Haozhi Qi<sup style="font-size:16px">1</sup></a>,
+      <a href="https://xiaolonw.github.io" style="font-size:22px">Xiaolong Wang<sup style="font-size:16px">2</sup></a>,
+      <a href="https://www.cs.cmu.edu/~dpathak" style="font-size:22px">Deepak Pathak<sup style="font-size:16px">3</sup></a>,
+      <a href="https://people.eecs.berkeley.edu/~yima" style="font-size:22px">Yi Ma<sup style="font-size:16px">1</sup></a>,
+      <a href="https://people.eecs.berkeley.edu/~malik" style="font-size:22px">Jitendra Malik<sup style="font-size:16px">1</sup></a>
+    </center>
 
-      <div class="col-md-2">
-        <center><span style="font-size:18px font-weight:800">
-          <a href="https://xiaolonw.github.io">Xiaolong Wang<sup style="font-size:10px">2</sup></a>
-        </span></center>
-      </div>
-
-      <div class="col-md-2">
-        <center><span style="font-size:18px font-weight:800">
-          <a href="https://www.cs.cmu.edu/~dpathak">Deepak Pathak<sup style="font-size:10px">3</sup></a>
-        </span></center>
-      </div>
-
-      <div class="col-md-2">
-        <center><span style="font-size:18px font-weight:800">
-          <a href="https://people.eecs.berkeley.edu/~yima">Yi Ma<sup style="font-size:10px">1</sup></a>
-        </span></center>
-      </div>
-
-      <div class="col-md-2">
-        <center><span style="font-size:18px font-weight:800">
-          <a href="https://people.eecs.berkeley.edu/~malik">Jitendra Malik<sup style="font-size:10px">1</sup></a>
-        </span></center>
-      </div>
-
-      <div class="col-md-1">
-      </div>
-    </div>
-
-    <!--------------------- AFFILIATIONS --------------------->
     <div class="gap-5"></div>
-    <div class="row">
+    <center>
+      UC Berkeley<sup style="font-size:12px">1</sup>,
+      UC San Diego<sup style="font-size:12px">2</sup>,
+      CMU <sup style="font-size:12px">3</sup>
+    </center>
 
-      <div class="col-md-3">
-      </div>
+    <div class="gap-10"></div>
 
-      <div class="col-md-2">
-        <center><span style="font-size:16px">
-          UC Berkeley<sup style="font-size:10px">1</sup>
-        </span></center>
-      </div>
+      <center>
+        <div class="btn-group" role="group" aria-label="Top menu">
+          <a href="https://arxiv.org/abs/2008.02265" class="btn btn-outline-dark">[Paper]</a>
+          <a href="https://github.com/HaozhiQi/RPIN" class="btn btn-outline-dark">[Code]</a>
+        </div>
+      </center>
 
-      <div class="col-md-2">
-        <center><span style="font-size:16px">
-          UC San Diego<sup style="font-size:10px">2</sup>
-        </span></center>
-      </div>
-
-      <div class="col-md-2">
-        <center><span style="font-size:16px">
-          CMU<sup style="font-size:10px">3</sup>
-        </span></center>
-      </div>
-
-      <div class="col-md-3">
-      </div>
-    </div>
-    <!--------------------- paper and code link --------------------->
-    <div class="gap-5"></div>
-    <div class="row">
-      <div class="col-md-4">
-      </div>
-
-      <div class="col-md-2">
-        <center><span style="font-size:17px font-weight:800">
-          <a href="https://arxiv.org/abs/2008.02265">[Paper]</a>
-        </span></center>
-      </div>
-
-      <div class="col-md-2">
-        <center><span style="font-size:17px font-weight:800">
-          <a href="https://github.com/HaozhiQi/RPIN">[Code]</a>
-        </span></center>
-      </div>
-
-      <div class="col-md-4">
-      </div>
 
     </div>
+  </div>
+
+  <div class="container">
     <!--------------------- teaser --------------------->
-    <div class="gap-20"></div>
     <div class="img" style="text-align:center">
       <img src="./figs/teaser.png" style="margin:0.2em;max-width:75%">
     </div>
 
+    <hr>
+
     <!--------------------- abstract --------------------->
-    <div class="gap-20"></div>
-    <b><span style="font-size:20px">Abstract:</span></b><br>
-    <div class="gap-5"></div>
+    <h2 style="text-align: center"> Abstract </h2>
+    <div class="gap-10"></div>
 
     <p> Learning long-term dynamics models is the key to understanding physical
 common sense. Most existing approaches on learning dynamics from visual input
@@ -188,9 +134,9 @@ both in terms of prediction quality and their ability to plan for downstream
 tasks, and also generalize well to novel environments. We also achieve <a href="https://paperswithcode.com/dataset/phyre"> state-of-the-art performance on PHYRE physical reasoning benchmark</a>.
     <hr>
 
-    <b><span style="font-size:20px">Method:</span></b><br>
+    <h2 style="text-align: center"> Method </h2>
 
-    <div class="gap-20"></div>
+    <div class="gap-10"></div>
     <div class="img" style="text-align:center">
       <img src="./figs/methodv2.png" style="margin:0.2em;max-width:75%">
     </div>
@@ -200,18 +146,20 @@ tasks, and also generalize well to novel environments. We also achieve <a href="
 
     <hr>
 
-    <b><span style="font-size:20px">Qualitative Results:</span></b><br>
-    <div class="gap-30"></div>
-
-    <center><b><span style="font-size:20px"> PHYRE (within-task generalization) </span></b></center>
+    <h2 style="text-align: center"> Qualitative Results </h2>
 
     <div class="gap-10"></div>
 
-    <p> We show our prediction results and baseline prediction results on the test set of PHYRE (within-task generalization, fold 0).
-      Given the first image and the objects' bounding boxes, we predict the future bounding boxes and masks for each moving objects.
-      The backgrounds (colored purple and black) and the color of the objects are taken from the input image. </p>
-
-    <div class="gap-10"></div>
+    <div class="card border-dark mb-3" style="border: none;">
+      <div class="card-header" style="text-align: center; background-color: rgba(0, 113, 188, 0.1); font-weight: bold;">
+        PHYRE (within-task generalization)
+      </div>
+      <div class="card-body">
+        <p> We show our prediction results and baseline prediction results on the test set of PHYRE (within-task generalization, fold 0).
+        Given the first image and the objects' bounding boxes, we predict the future bounding boxes and masks for each moving objects.
+          The backgrounds (colored purple and black) and the color of the objects are taken from the input image. </p>
+      </div>
+    </div>
 
     <div class="row no-gutters">
       <div class="col-6">
@@ -620,12 +568,15 @@ tasks, and also generalize well to novel environments. We also achieve <a href="
 
     <div class="gap-30"></div>
 
-    <center><b><span style="font-size:20px"> PHYRE (cross-task generalization) </span></b></center>
-
-    <div class="gap-10"></div>
-
-    <p> We show our prediction results and baseline prediction results on the test set of PHYRE (cross-task generalization, fold 0). Given the first image and the objects' bounding boxes, we predict the future bounding boxes and masks for each moving objects.
+    <div class="card border-dark mb-3" style="border: none;">
+      <div class="card-header" style="text-align: center; background-color: rgba(0, 113, 188, 0.1); font-weight: bold;">
+        PHYRE (cross-task generalization)
+      </div>
+      <div class="card-body">
+        <p> We show our prediction results and baseline prediction results on the test set of PHYRE (cross-task generalization, fold 0). Given the first image and the objects' bounding boxes, we predict the future bounding boxes and masks for each moving objects.
       The backgrounds (colored purple and black) is taken from the input image. The environments shown here is not seen during training.</p>
+      </div>
+    </div>
 
     <div class="row no-gutters">
       <div class="col-6">
@@ -775,7 +726,11 @@ tasks, and also generalize well to novel environments. We also achieve <a href="
 
     <div class="gap-30"></div>
 
-    <center><b><span style="font-size:20px"> Real-World Billiard </span></b></center>
+    <div class="card border-dark mb-3" style="border: none;">
+      <div class="card-header" style="text-align: center; background-color: rgba(0, 113, 188, 0.1); font-weight: bold;">
+        Real-World Billiard
+      </div>
+    </div>
 
     <div class="gap-20"></div>
 
@@ -843,11 +798,13 @@ tasks, and also generalize well to novel environments. We also achieve <a href="
       </div>
     </div>
 
-    <div class="gap-30"></div>
+        <div class="gap-30"></div>
 
-    <center><b><span style="font-size:20px"> Simulated Billiard </span></b></center>
-
-    <div class="gap-20"></div>
+    <div class="card border-dark mb-3" style="border: none;">
+      <div class="card-header" style="text-align: center; background-color: rgba(0, 113, 188, 0.1); font-weight: bold;">
+        Simulated Billiard
+      </div>
+    </div>
 
     <div class="row no-gutters">
       <div class="col-6">
@@ -960,9 +917,11 @@ tasks, and also generalize well to novel environments. We also achieve <a href="
 
     <div class="gap-30"></div>
 
-    <center><b><span style="font-size:20px"> ShapeStacks </span></b></center>
-
-    <div class="gap-20"></div>
+    <div class="card border-dark mb-3" style="border: none;">
+      <div class="card-header" style="text-align: center; background-color: rgba(0, 113, 188, 0.1); font-weight: bold;">
+        ShapeStacks
+      </div>
+    </div>
 
     <div class="row no-gutters">
       <div class="col-6">
@@ -1038,8 +997,9 @@ tasks, and also generalize well to novel environments. We also achieve <a href="
 
     <hr>
 
-    <b><span style="font-size:20px">Paper:</span></b><br>
-    <div class="img" style="text-align:center">
+    <h2 style="text-align: center"> Paper </h2>
+    <div class="gap-10"></div>
+    <div class="img" style="text-align:center;">
       <a href="https://arxiv.org/pdf/2008.02265.pdf">
         <img src="./figs/thumbnail.png" style="margin:1.2em;max-width:95%">
       </a>
@@ -1047,10 +1007,11 @@ tasks, and also generalize well to novel environments. We also achieve <a href="
 
     <hr>
 
-    <b><span style="font-size:20px">Bibtex:</span></b>
+    <h2 style="text-align: center"> Bibtex </h2>
     <br>
     <div class="gap-10"></div>
-    <pre>
+    <pre style="background-color: #f4f4f4;">
+
     @InProceedings{qi2021learning,
      author={Qi, Haozhi and Wang, Xiaolong and Pathak, Deepak and Ma, Yi and Malik, Jitendra},
      title={Learning Long-term Visual Dynamics with Region Proposal Interaction Networks},
@@ -1060,10 +1021,12 @@ tasks, and also generalize well to novel environments. We also achieve <a href="
     </pre>
     <hr>
 
-    <b><span style="font-size:20px">Acknowledgements:</span></b><br>
-    <div class="gap-10"></div>
+    <b><span style="font-size:22px">Acknowledgements:</span></b><br>
     This work is supported in part by DARPA MCS and DARPA LwLL.
     We would like to thank the members of BAIR for fruitful discussions and comments.
+
+   <p style="text-align: right"><a href="https://github.com/HaozhiQi/RPIN/tree/gh-pages" style="font-size:12px;">Code for this Website</a></p>
+
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
