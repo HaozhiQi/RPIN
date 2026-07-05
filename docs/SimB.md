@@ -8,11 +8,11 @@ In this document, we provide instructions on how to prepare data for training/te
 
 You could download the SimB dataset using the following script:
 ```
-gdown --id 1ucTEMTyzWS1uaknrFU3gTpE3KnNlKAIf -O data/simb.zip
+gdown --id 1ZcazDFfEATqdzih83pps5Y4ixqxcwH50 -O data/simb.zip
 unzip data/simb.zip -d data/
 ```
 
-If you are unable to run the script above, you can also try to download using the [link](https://drive.google.com/file/d/1ucTEMTyzWS1uaknrFU3gTpE3KnNlKAIf/), and unzip it to have the following file structures:
+If you are unable to run the script above, you can also try to download using the [link](https://drive.google.com/file/d/1ZcazDFfEATqdzih83pps5Y4ixqxcwH50/), and unzip it to have the following file structures:
 ```
 data/simb/train.hkl
 data/simb/test.hkl
@@ -26,10 +26,10 @@ python tools/prepare_billiard.py --split test
 
 ## 1.2 Evaluate Our Prediction Model
 
-Then, you can evaluate our pre-trained models and train your own models. To evaluate the pretrained models, download them using the following script or the following links for [RPCIN](https://drive.google.com/file/d/1vbJWlLCdT6GqTqry61TB3eEOGtDg9q-J/).
+Then, you can evaluate our pre-trained models and train your own models. To evaluate the pretrained models, download them using the following script or the following links for [RPCIN](https://drive.google.com/file/d/1ao3nflNaowDmPIHU9Mw_jUCYDJpUBymj/).
 
 ```
-gdown --id 1vbJWlLCdT6GqTqry61TB3eEOGtDg9q-J -O outputs/phys/simb/rpcin.zip
+gdown --id 1ao3nflNaowDmPIHU9Mw_jUCYDJpUBymj -O outputs/phys/simb/rpcin.zip
 unzip outputs/phys/simb/rpcin.zip -d outputs/phys/simb/
 ```
 

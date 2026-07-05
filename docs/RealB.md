@@ -21,7 +21,7 @@ unzip data/realb.zip -d data/
 
 You can download our pre-trained RPIN model using the following script:
 ```
-gdown --id 1w8Id8UYfQcYhc3nh2_I6Qnkt56Qr29xS -O outputs/phys/realb/rpcin.zip
+gdown --id 1yluVDlEXvI5SNz1vaqIQ2TzrNAEAEDcb -O outputs/phys/realb/rpcin.zip
 unzip outputs/phys/realb/rpcin.zip -d outputs/phys/realb/
 ```
 
